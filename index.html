@@ -1,0 +1,2513 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#a855f7" />
+<title>⚗️ Lab Detektif Elektrolit — Kimia Kelas X</title>
+
+<!-- ══════════ GOOGLE FONTS ══════════ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- ══════════ LIBRARY CDN ══════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+/* ══════════════════════════════════════════════════════════
+   RESET & DASAR
+   ══════════════════════════════════════════════════════════ */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;min-height:100%;}
+body{
+  font-family:'Nunito',system-ui,-apple-system,sans-serif;
+  color:#334155;
+  background:linear-gradient(165deg,#fffbe8 0%,#e6f7ff 32%,#ffe9f5 62%,#eaffe4 100%);
+  background-attachment:fixed;
+  overscroll-behavior:none;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.font-head{font-family:'Baloo 2',cursive;}
+
+#app{
+  max-width:520px;
+  margin:0 auto;
+  min-height:100vh;
+  position:relative;
+  overflow-x:hidden;
+}
+
+.screen{display:none;padding:16px 14px 90px;animation:fadeIn .35s ease;}
+.screen.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+.txt{font-size:14px;line-height:1.65;color:#475569;margin:0 0 8px;}
+.txt b{color:#7c3aed;}
+
+/* ══════════════════════════════════════════════════════════
+   BRAND / HEADER
+   ══════════════════════════════════════════════════════════ */
+.brand{text-align:center;padding:14px 4px 10px;}
+.brand-badge{
+  font-size:44px;line-height:1;
+  filter:drop-shadow(0 8px 14px rgba(168,85,247,.35));
+  animation:floaty 3s ease-in-out infinite;
+}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-8px) rotate(3deg);}}
+.brand-title{
+  font-size:25px;font-weight:800;margin:8px 0 4px;letter-spacing:.3px;
+  background:linear-gradient(92deg,#06b6d4 0%,#a855f7 48%,#ec4899 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  -webkit-text-fill-color:transparent;
+}
+.brand-sub{
+  font-size:12px;font-weight:700;color:#94a3b8;margin:0;
+  letter-spacing:.4px;text-transform:uppercase;
+}
+
+/* ══════════════════════════════════════════════════════════
+   KARTU
+   ══════════════════════════════════════════════════════════ */
+.card{
+  background:#ffffff;
+  border-radius:24px;
+  padding:16px 15px;
+  margin-bottom:14px;
+  border:3px solid #e2e8f0;
+  box-shadow:0 10px 26px rgba(100,116,139,.10);
+}
+.card>h2{
+  font-size:17px;font-weight:800;margin:0 0 10px;
+  display:flex;align-items:center;gap:7px;color:#1e293b;
+}
+.card.cyan{border-color:#7ee8fa;box-shadow:0 10px 26px rgba(34,211,238,.16);}
+.card.purple{border-color:#c4b5fd;box-shadow:0 10px 26px rgba(168,85,247,.16);}
+.card.pink{border-color:#f9a8d4;box-shadow:0 10px 26px rgba(236,72,153,.16);}
+.card.lime{border-color:#bef264;box-shadow:0 10px 26px rgba(132,204,22,.16);}
+
+/* ══════════════════════════════════════════════════════════
+   TAB TEORI
+   ══════════════════════════════════════════════════════════ */
+.tabs{display:flex;gap:6px;margin-bottom:12px;}
+.tab{
+  flex:1;padding:11px 2px;border-radius:15px;border:2.5px solid #e9eef5;
+  background:#f8fafc;font-family:'Baloo 2',cursive;font-weight:700;
+  font-size:13px;color:#94a3b8;cursor:pointer;transition:.22s;
+}
+.tab.active{color:#fff;border-color:transparent;transform:translateY(-2px);}
+.tab.active[data-tab="kuat"]{background:linear-gradient(135deg,#4ade80,#16a34a);box-shadow:0 8px 18px rgba(22,163,74,.35);}
+.tab.active[data-tab="lemah"]{background:linear-gradient(135deg,#fbbf24,#f59e0b);box-shadow:0 8px 18px rgba(245,158,11,.35);}
+.tab.active[data-tab="non"]{background:linear-gradient(135deg,#fb7185,#e11d48);box-shadow:0 8px 18px rgba(225,29,72,.35);}
+
+.tab-panel{display:none;animation:fadeIn .3s ease;}
+.tab-panel.active{display:block;}
+
+.badge{
+  display:inline-block;padding:6px 13px;border-radius:999px;
+  font-size:12px;font-weight:900;letter-spacing:.3px;margin-bottom:9px;
+}
+.badge.green{background:#dcfce7;color:#15803d;border:2px solid #86efac;}
+.badge.yellow{background:#fef9c3;color:#a16207;border:2px solid #fde047;}
+.badge.red{background:#ffe4e6;color:#be123c;border:2px solid #fda4af;}
+
+.ex-list{display:flex;flex-direction:column;gap:7px;margin-top:10px;}
+.ex{
+  display:flex;align-items:center;gap:9px;
+  background:#f8fbff;border:2px solid #eaf2fb;border-radius:15px;
+  padding:8px 10px;transition:.2s;
+}
+.ex:active{transform:scale(.985);}
+.ex-rumus{
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:13.5px;
+  padding:5px 10px;border-radius:11px;white-space:nowrap;
+  background:linear-gradient(135deg,#e0f2fe,#ede9fe);
+  color:#6d28d9;border:2px solid #ddd6fe;min-width:86px;text-align:center;
+}
+.ex-info{display:flex;flex-direction:column;line-height:1.25;min-width:0;}
+.ex-info b{font-size:12.5px;color:#1e293b;}
+.ex-info span{font-size:11px;color:#94a3b8;font-weight:600;}
+
+.formula-foot{
+  margin-top:12px;padding:10px 12px;border-radius:15px;
+  background:linear-gradient(135deg,#f0f9ff,#faf5ff);
+  border:2px dashed #c4b5fd;
+  font-size:12px;font-weight:800;color:#7c3aed;text-align:center;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PETUNJUK
+   ══════════════════════════════════════════════════════════ */
+.steps{list-style:none;margin:0;padding:0;counter-reset:s;}
+.steps li{
+  position:relative;padding:8px 6px 8px 40px;font-size:13px;
+  line-height:1.5;color:#475569;font-weight:600;
+  border-bottom:1.5px dashed #f1f5f9;
+}
+.steps li:last-child{border-bottom:none;}
+.steps li::before{
+  counter-increment:s;content:counter(s);
+  position:absolute;left:4px;top:8px;
+  width:25px;height:25px;border-radius:50%;
+  background:linear-gradient(135deg,#f472b6,#a855f7);
+  color:#fff;font-family:'Baloo 2',cursive;font-weight:800;font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 10px rgba(168,85,247,.35);
+}
+
+/* ══════════════════════════════════════════════════════════
+   INPUT NAMA + AVATAR
+   ══════════════════════════════════════════════════════════ */
+.field-label{
+  font-size:12px;font-weight:900;color:#65a30d;
+  text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:block;
+}
+input[type="text"]{
+  width:100%;padding:14px 16px;border-radius:16px;
+  border:3px solid #e2e8f0;background:#f8fafc;
+  font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;
+  color:#1e293b;outline:none;transition:.22s;
+}
+input[type="text"]:focus{border-color:#a3e635;background:#fff;box-shadow:0 0 0 5px rgba(163,230,53,.18);}
+input[type="text"]::placeholder{color:#cbd5e1;font-weight:600;}
+
+.avatar-label{margin-top:14px;}
+.avatars{display:flex;gap:12px;}
+.avatar-opt{
+  flex:1;border:3px solid #e9eef5;border-radius:20px;
+  padding:10px 6px 8px;text-align:center;cursor:pointer;
+  background:#f8fafc;transition:.22s;
+}
+.avatar-opt:active{transform:scale(.97);}
+.avatar-opt.sel{
+  border-color:#ec4899;background:#fff5fa;
+  box-shadow:0 10px 24px rgba(236,72,153,.28);
+  transform:translateY(-3px);
+}
+.avatar-opt svg{width:74px;height:88px;display:block;margin:0 auto 4px;}
+.avatar-opt span{
+  font-family:'Baloo 2',cursive;font-weight:700;font-size:12.5px;color:#64748b;
+}
+.avatar-opt.sel span{color:#db2777;}
+
+/* ══════════════════════════════════════════════════════════
+   TOMBOL
+   ══════════════════════════════════════════════════════════ */
+.btn{
+  display:block;width:100%;padding:16px;
+  border:none;border-radius:20px;cursor:pointer;
+  font-family:'Baloo 2',cursive;font-size:16.5px;font-weight:800;
+  letter-spacing:.3px;color:#fff;transition:transform .15s,box-shadow .15s,opacity .2s;
+  margin-top:10px;
+}
+.btn:active{transform:scale(.972);}
+.btn:disabled{opacity:.6;cursor:not-allowed;}
+.btn-primary{
+  background:linear-gradient(135deg,#22d3ee 0%,#a855f7 52%,#ec4899 100%);
+  box-shadow:0 12px 26px rgba(168,85,247,.38);
+}
+.btn-green{
+  background:linear-gradient(135deg,#4ade80,#10b981);
+  box-shadow:0 12px 26px rgba(16,185,129,.34);
+}
+.btn-ghost{
+  background:#fff;color:#7c3aed;border:3px solid #ddd6fe;
+  box-shadow:0 8px 20px rgba(124,58,237,.12);
+}
+
+/* ══════════════════════════════════════════════════════════
+   LAYAR LAB 3D
+   ══════════════════════════════════════════════════════════ */
+#screen-lab{padding:0;}
+#screen-lab.active{display:block;}
+#labWrap{position:relative;width:100%;height:100vh;height:100dvh;overflow:hidden;background:#dff3ff;}
+#labCanvas{display:block;width:100%;height:100%;touch-action:none;}
+
+/* HUD */
+.hud{
+  position:absolute;top:10px;right:10px;z-index:10;
+  display:flex;flex-direction:column;gap:6px;align-items:flex-end;
+  pointer-events:none;
+}
+.hud-chip{
+  pointer-events:auto;
+  background:rgba(255,255,255,.94);
+  border-radius:14px;padding:7px 12px;
+  font-size:12px;font-weight:900;color:#334155;
+  box-shadow:0 6px 16px rgba(15,23,42,.14);
+  border:2px solid #e9eef5;
+  display:flex;align-items:center;gap:6px;white-space:nowrap;
+}
+.hud-chip.name{color:#7c3aed;border-color:#ddd6fe;}
+.hud-chip.point{color:#b45309;border-color:#fde68a;background:rgba(255,251,235,.95);}
+.hud-chip.prog{color:#0369a1;border-color:#bae6fd;background:rgba(240,249,255,.95);}
+.hud-btn{
+  pointer-events:auto;cursor:pointer;border:none;
+  background:rgba(255,255,255,.94);
+  border-radius:14px;width:40px;height:38px;
+  font-size:17px;line-height:1;
+  box-shadow:0 6px 16px rgba(15,23,42,.14);
+  border:2px solid #e9eef5;transition:transform .15s;
+}
+.hud-btn:active{transform:scale(.92);}
+
+/* Joystick */
+#joy{
+  position:absolute;left:18px;bottom:28px;z-index:11;
+  width:124px;height:124px;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.68),rgba(255,255,255,.34));
+  border:3px solid rgba(168,85,247,.45);
+  box-shadow:0 10px 26px rgba(15,23,42,.18), inset 0 0 22px rgba(168,85,247,.14);
+  touch-action:none;user-select:none;
+}
+#joyKnob{
+  position:absolute;left:50%;top:50%;
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,#22d3ee,#a855f7);
+  transform:translate(-50%,-50%);
+  box-shadow:0 8px 18px rgba(88,28,135,.42);
+  transition:transform .04s linear;
+  display:flex;align-items:center;justify-content:center;
+  font-size:19px;
+}
+
+/* Tombol Uji */
+#btnUji{
+  position:absolute;right:16px;bottom:36px;z-index:12;
+  display:none;width:auto;padding:14px 20px;
+  border:none;border-radius:20px;cursor:pointer;
+  font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:#fff;
+  background:linear-gradient(135deg,#f472b6,#a855f7);
+  box-shadow:0 12px 26px rgba(168,85,247,.45);
+  animation:pulseBtn 1.5s ease-in-out infinite;
+}
+#btnUji.show{display:block;}
+#btnUji:active{transform:scale(.95);}
+@keyframes pulseBtn{
+  0%,100%{box-shadow:0 12px 26px rgba(168,85,247,.45);}
+  50%{box-shadow:0 12px 34px rgba(236,72,153,.75);}
+}
+
+/* Petunjuk kecil di lab */
+#labHint{
+  position:absolute;left:50%;top:14px;transform:translateX(-50%);
+  z-index:10;background:rgba(255,255,255,.9);
+  padding:7px 14px;border-radius:999px;
+  font-size:11px;font-weight:800;color:#7c3aed;
+  box-shadow:0 6px 16px rgba(15,23,42,.12);
+  border:2px solid #ddd6fe;white-space:nowrap;
+  transition:opacity .5s;
+}
+
+/* ══════════════════════════════════════════════════════════
+   MODAL
+   ══════════════════════════════════════════════════════════ */
+.modal{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(30,41,59,.55);
+  backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;padding:16px;
+}
+.modal.show{display:flex;animation:fadeIn .25s ease;}
+.modal-box{
+  background:#fff;border-radius:26px;padding:18px 16px 20px;
+  width:100%;max-width:420px;max-height:88vh;overflow-y:auto;
+  box-shadow:0 24px 60px rgba(15,23,42,.35);
+  animation:popIn .3s cubic-bezier(.2,1.4,.5,1);
+  position:relative;
+}
+@keyframes popIn{from{transform:scale(.85);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal-close{
+  position:absolute;top:12px;right:12px;
+  width:32px;height:32px;border-radius:50%;border:none;
+  background:#f1f5f9;color:#94a3b8;font-size:16px;font-weight:900;
+  cursor:pointer;line-height:1;
+}
+.modal-title{
+  font-family:'Baloo 2',cursive;font-size:19px;font-weight:800;
+  color:#1e293b;margin:0 0 4px;
+}
+.modal-sub{font-size:12.5px;font-weight:800;color:#94a3b8;margin:0 0 12px;}
+
+.obs-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+.obs-item{
+  background:linear-gradient(135deg,#f0f9ff,#faf5ff);
+  border:2px solid #e0e7ff;border-radius:15px;
+  padding:10px 13px;font-size:13.5px;font-weight:800;color:#4338ca;
+}
+
+.ans-btns{display:flex;flex-direction:column;gap:8px;}
+.ans-btn{
+  width:100%;padding:13px;border-radius:16px;cursor:pointer;
+  border:2.5px solid #e2e8f0;background:#f8fafc;
+  font-family:'Baloo 2',cursive;font-size:14.5px;font-weight:700;color:#475569;
+  transition:.18s;text-align:left;padding-left:16px;
+}
+.ans-btn:active{transform:scale(.98);}
+.ans-btn:hover{border-color:#c4b5fd;background:#faf5ff;}
+.ans-btn.correct{background:linear-gradient(135deg,#4ade80,#16a34a);color:#fff;border-color:transparent;}
+.ans-btn.wrong{background:#ffe4e6;color:#be123c;border-color:#fda4af;animation:shake .4s;}
+.ans-btn:disabled{opacity:.55;cursor:not-allowed;}
+@keyframes shake{
+  0%,100%{transform:translateX(0);}
+  25%{transform:translateX(-7px);}
+  75%{transform:translateX(7px);}
+}
+
+.feedback{
+  margin-top:12px;padding:11px 14px;border-radius:15px;
+  font-size:13px;font-weight:800;line-height:1.5;display:none;
+}
+.feedback.show{display:block;animation:fadeIn .25s;}
+.feedback.ok{background:#dcfce7;color:#15803d;border:2px solid #86efac;}
+.feedback.no{background:#ffe4e6;color:#be123c;border:2px solid #fda4af;}
+
+/* ══════════════════════════════════════════════════════════
+   LAYAR KUIS
+   ══════════════════════════════════════════════════════════ */
+.quiz-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
+}
+.quiz-head h2{
+  font-size:19px;font-weight:800;margin:0;
+  background:linear-gradient(92deg,#06b6d4,#a855f7,#ec4899);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.quiz-count{
+  font-size:12px;font-weight:900;color:#7c3aed;
+  background:#f5f3ff;padding:5px 12px;border-radius:999px;border:2px solid #ddd6fe;
+}
+.progress-outer{
+  width:100%;height:12px;border-radius:999px;background:#e9eef5;
+  overflow:hidden;margin-bottom:14px;box-shadow:inset 0 2px 4px rgba(0,0,0,.06);
+}
+.progress-inner{
+  height:100%;width:0%;border-radius:999px;
+  background:linear-gradient(90deg,#22d3ee,#a855f7,#ec4899);
+  transition:width .45s cubic-bezier(.4,1.3,.5,1);
+}
+
+.q-card{
+  background:#fff;border-radius:24px;padding:16px;
+  border:3px solid #c4b5fd;
+  box-shadow:0 12px 28px rgba(168,85,247,.15);
+  margin-bottom:14px;
+}
+.q-num{
+  display:inline-block;background:linear-gradient(135deg,#a855f7,#ec4899);
+  color:#fff;font-family:'Baloo 2',cursive;font-weight:800;
+  font-size:12px;padding:4px 12px;border-radius:999px;margin-bottom:10px;
+}
+.q-text{font-size:14.5px;font-weight:700;line-height:1.6;color:#1e293b;margin:0 0 4px;}
+
+.opts{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;
+  padding:12px 13px;border-radius:16px;cursor:pointer;
+  border:2.5px solid #e9eef5;background:#f8fafc;
+  font-size:13.5px;font-weight:700;color:#475569;
+  line-height:1.45;text-align:left;transition:.18s;font-family:'Nunito',sans-serif;
+}
+.opt:active{transform:scale(.985);}
+.opt .ltr{
+  flex:0 0 24px;height:24px;border-radius:8px;
+  background:#e2e8f0;color:#64748b;
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:12.5px;
+  display:flex;align-items:center;justify-content:center;
+}
+.opt:hover:not(:disabled){border-color:#c4b5fd;background:#faf5ff;}
+.opt.correct{background:linear-gradient(135deg,#4ade80,#16a34a);border-color:transparent;color:#fff;}
+.opt.correct .ltr{background:rgba(255,255,255,.3);color:#fff;}
+.opt.wrong{background:#ffe4e6;border-color:#fda4af;color:#be123c;animation:shake .4s;}
+.opt.wrong .ltr{background:#fda4af;color:#fff;}
+.opt:disabled{cursor:not-allowed;}
+
+/* ══════════════════════════════════════════════════════════
+   SERTIFIKAT
+   ══════════════════════════════════════════════════════════ */
+#screen-cert{padding-top:22px;}
+
+.cert-card{
+  position:relative;
+  background:#fff;
+  border-radius:26px;
+  padding:5px;
+  background-image:linear-gradient(135deg,#22d3ee,#a855f7,#ec4899,#fbbf24,#4ade80,#22d3ee);
+  background-size:300% 300%;
+  animation:gradShift 9s ease infinite;
+  box-shadow:0 18px 44px rgba(168,85,247,.28);
+  margin-bottom:16px;
+}
+@keyframes gradShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+.cert-inner{
+  background:#fff;border-radius:22px;padding:22px 18px 18px;text-align:center;
+}
+
+.cert-seal{font-size:46px;line-height:1;filter:drop-shadow(0 6px 12px rgba(251,191,36,.5));}
+.cert-school{
+  font-size:10.5px;font-weight:900;letter-spacing:2px;
+  color:#94a3b8;margin:8px 0 6px;text-transform:uppercase;
+}
+.cert-title{
+  font-family:'Baloo 2',cursive;
+  font-size:36px;font-weight:800;letter-spacing:3px;
+  margin:0 0 4px;line-height:1.05;
+  background:linear-gradient(92deg,#06b6d4,#a855f7,#ec4899);
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;
+}
+.cert-sub{
+  font-size:10px;font-weight:900;letter-spacing:1.4px;color:#a855f7;
+  margin:0 0 14px;text-transform:uppercase;
+}
+.cert-give{font-size:11.5px;font-weight:700;color:#94a3b8;margin-bottom:8px;}
+.cert-name{
+  display:inline-block;
+  font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:#db2777;
+  padding:8px 20px;border-radius:14px;
+  border:3px dashed #f9a8d4;background:#fff5fa;
+  margin-bottom:14px;max-width:100%;word-break:break-word;
+}
+.cert-desc{
+  font-size:11.5px;line-height:1.7;color:#64748b;font-weight:600;
+  margin:0 0 16px;padding:0 4px;
+}
+.cert-scores{
+  display:flex;gap:10px;margin-bottom:18px;
+}
+.cert-score,.cert-grade{
+  flex:1;border-radius:18px;padding:11px 6px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+.cert-score{background:linear-gradient(135deg,#ecfeff,#e0f2fe);border:2.5px solid #a5f3fc;}
+.cert-grade{background:linear-gradient(135deg,#fff1f2,#fdf2f8);border:2.5px solid #fbcfe8;}
+.cert-score span,.cert-grade span{
+  font-size:9.5px;font-weight:900;letter-spacing:1.6px;color:#94a3b8;
+}
+.cert-score strong,.cert-grade strong{
+  font-family:'Baloo 2',cursive;font-size:30px;font-weight:800;line-height:1;
+}
+.cert-score strong{
+  background:linear-gradient(135deg,#06b6d4,#0891b2);
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;
+}
+.cert-grade strong{
+  background:linear-gradient(135deg,#ec4899,#db2777);
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;
+}
+
+.cert-foot{
+  border-top:2px dashed #e9eef5;padding-top:13px;margin-top:4px;
+}
+.cert-teacher .ttl{
+  font-size:9.5px;font-weight:900;letter-spacing:1.6px;color:#94a3b8;margin-bottom:3px;
+}
+.cert-teacher .tname{
+  font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;color:#1e293b;
+}
+.cert-date{
+  font-size:11px;font-weight:700;color:#94a3b8;margin-top:11px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   UTIL
+   ══════════════════════════════════════════════════════════ */
+.toast{
+  position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);
+  background:rgba(30,41,59,.94);color:#fff;
+  padding:11px 20px;border-radius:999px;
+  font-size:13px;font-weight:800;z-index:500;
+  opacity:0;pointer-events:none;transition:.3s;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-thumb{background:#ddd6fe;border-radius:999px;}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+<!-- ══════════════════════════════════════════════════════════
+     LAYAR 1 — HALAMAN AWAL
+     ══════════════════════════════════════════════════════════ -->
+<section id="screen-home" class="screen active">
+
+  <header class="brand">
+    <div class="brand-badge">⚗️</div>
+    <h1 class="brand-title">LAB DETEKTIF ELEKTROLIT</h1>
+    <p class="brand-sub">Petualangan Virtual ala Roblox · Kimia Kelas X</p>
+  </header>
+
+  <!-- TUJUAN PEMBELAJARAN -->
+  <div class="card cyan">
+    <h2>🎯 Tujuan Pembelajaran</h2>
+    <p class="txt">Murid mampu <b>mengklasifikasikan</b> dan <b>membedakan</b> larutan elektrolit dan non-elektrolit berdasarkan <b>daya hantar listriknya</b>.</p>
+  </div>
+
+  <!-- TEORI DASAR 3 TAB -->
+  <div class="card purple">
+    <h2>📚 Teori Dasar &amp; Contoh Larutan</h2>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="kuat">⚡ Kuat</button>
+      <button class="tab" data-tab="lemah">💧 Lemah</button>
+      <button class="tab" data-tab="non">🚫 Non</button>
+    </div>
+
+    <!-- TAB KUAT -->
+    <div class="tab-panel active" id="tab-kuat">
+      <span class="badge green">Elektrolit KUAT · α = 1</span>
+      <p class="txt">Zat terionisasi <b>sempurna</b> di dalam air. Lampu menyala <b>terang</b> dan gelembung gas <b>banyak</b>.</p>
+      <div class="ex-list">
+        <div class="ex"><span class="ex-rumus">HCl</span><span class="ex-info"><b>Asam Klorida</b><span>Asam lambung, pembersih keramik</span></span></div>
+        <div class="ex"><span class="ex-rumus">NaOH</span><span class="ex-info"><b>Natrium Hidroksida</b><span>Soda api, pembuat sabun</span></span></div>
+        <div class="ex"><span class="ex-rumus">NaCl</span><span class="ex-info"><b>Natrium Klorida</b><span>Garam dapur</span></span></div>
+        <div class="ex"><span class="ex-rumus">H₂SO₄</span><span class="ex-info"><b>Asam Sulfat</b><span>Air aki kendaraan</span></span></div>
+        <div class="ex"><span class="ex-rumus">KOH</span><span class="ex-info"><b>Kalium Hidroksida</b><span>Bahan sabun cair</span></span></div>
+      </div>
+    </div>
+
+    <!-- TAB LEMAH -->
+    <div class="tab-panel" id="tab-lemah">
+      <span class="badge yellow">Elektrolit LEMAH · 0 &lt; α &lt; 1</span>
+      <p class="txt">Zat terionisasi <b>sebagian</b> di dalam air. Lampu menyala <b>redup</b> dan gelembung gas <b>sedikit</b>.</p>
+      <div class="ex-list">
+        <div class="ex"><span class="ex-rumus">CH₃COOH</span><span class="ex-info"><b>Asam Cuka</b><span>Cuka dapur</span></span></div>
+        <div class="ex"><span class="ex-rumus">NH₃</span><span class="ex-info"><b>Amonia</b><span>Pembersih kaca</span></span></div>
+        <div class="ex"><span class="ex-rumus">H₂CO₃</span><span class="ex-info"><b>Asam Karbonat</b><span>Air soda</span></span></div>
+        <div class="ex"><span class="ex-rumus">Al(OH)₃</span><span class="ex-info"><b>Aluminium Hidroksida</b><span>Obat maag</span></span></div>
+        <div class="ex"><span class="ex-rumus">C₆H₈O₇</span><span class="ex-info"><b>Asam Sitrat</b><span>Air jeruk nipis</span></span></div>
+      </div>
+    </div>
+
+    <!-- TAB NON -->
+    <div class="tab-panel" id="tab-non">
+      <span class="badge red">NON-ELEKTROLIT · α = 0</span>
+      <p class="txt">Zat <b>tidak terionisasi</b> di dalam air, tetap berupa <b>molekul netral</b>. Lampu <b>mati</b> dan <b>tidak ada</b> gelembung.</p>
+      <div class="ex-list">
+        <div class="ex"><span class="ex-rumus">C₆H₁₂O₆</span><span class="ex-info"><b>Glukosa</b><span>Gula darah</span></span></div>
+        <div class="ex"><span class="ex-rumus">CO(NH₂)₂</span><span class="ex-info"><b>Urea</b><span>Pupuk tanaman</span></span></div>
+        <div class="ex"><span class="ex-rumus">C₂H₅OH</span><span class="ex-info"><b>Etanol</b><span>Alkohol 70%</span></span></div>
+        <div class="ex"><span class="ex-rumus">C₁₂H₂₂O₁₁</span><span class="ex-info"><b>Sukrosa</b><span>Gula pasir</span></span></div>
+        <div class="ex"><span class="ex-rumus">C₃H₈O₃</span><span class="ex-info"><b>Gliserol</b><span>Pelembap kulit</span></span></div>
+      </div>
+    </div>
+
+    <div class="formula-foot">🧮 Derajat ionisasi: &nbsp; α = mol terionisasi ÷ mol mula-mula</div>
+  </div>
+
+  <!-- PETUNJUK -->
+  <div class="card pink">
+    <h2>📖 Petunjuk Bermain</h2>
+    <ol class="steps">
+      <li>Isi <b>nama detektif</b> dan pilih salah satu <b>avatar jas lab</b>.</li>
+      <li>Tekan <b>🚀 MULAI PENJELAJAHAN</b> untuk masuk ke laboratorium 3D.</li>
+      <li>Gerakkan karakter dengan <b>joystick</b> kiri bawah, <b>tap gelas</b>, atau tombol <b>WASD / panah</b>.</li>
+      <li>Dekati gelas kimia, lalu tekan tombol <b>🔬 Uji</b> yang muncul.</li>
+      <li>Amati <b>nyala lampu</b> dan <b>gelembung gas</b>, lalu tentukan jenis larutannya.</li>
+      <li>Jawaban benar <b>+10 poin</b>, salah <b>−5 poin</b> — boleh diulang sampai benar.</li>
+      <li>Setelah 10 gelas selesai, jawab <b>6 soal berpikir kritis</b> dan raih sertifikatmu! 🏅</li>
+    </ol>
+  </div>
+
+  <!-- DATA DETEKTIF -->
+  <div class="card lime">
+    <h2>👤 Data Detektif</h2>
+
+    <label class="field-label" for="inpNama">Nama Lengkap</label>
+    <input type="text" id="inpNama" placeholder="Tulis namamu di sini…" maxlength="34" autocomplete="off" />
+
+    <label class="field-label avatar-label">Pilih Avatar</label>
+    <div class="avatars">
+      <div class="avatar-opt sel" data-avatar="putri">
+        <svg viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="40" cy="90" rx="24" ry="5" fill="#000" opacity=".08"/>
+          <!-- rambut panjang -->
+          <path d="M18 34 Q18 10 40 10 Q62 10 62 34 L62 70 Q58 62 54 70 L54 40 L26 40 L26 70 Q22 62 18 70 Z" fill="#4a2c17"/>
+          <!-- badan jas lab -->
+          <path d="M22 56 Q22 46 40 46 Q58 46 58 56 L60 88 Q40 92 20 88 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.6"/>
+          <!-- kemeja pink -->
+          <path d="M32 47 L40 62 L48 47 L44 46 L40 54 L36 46 Z" fill="#ff8fc8"/>
+          <!-- lengan -->
+          <rect x="12" y="56" width="11" height="26" rx="5.5" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.4"/>
+          <rect x="57" y="56" width="11" height="26" rx="5.5" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.4"/>
+          <!-- leher -->
+          <rect x="35" y="40" width="10" height="9" rx="4" fill="#f6c9a0"/>
+          <!-- wajah -->
+          <ellipse cx="40" cy="30" rx="15" ry="17" fill="#ffdcb8"/>
+          <!-- poni -->
+          <path d="M25 26 Q28 8 40 8 Q52 8 55 26 Q50 18 40 19 Q30 18 25 26 Z" fill="#4a2c17"/>
+          <!-- mata -->
+          <circle cx="34" cy="30" r="2.4" fill="#1e293b"/>
+          <circle cx="46" cy="30" r="2.4" fill="#1e293b"/>
+          <circle cx="34.8" cy="29.2" r=".9" fill="#fff"/>
+          <circle cx="46.8" cy="29.2" r=".9" fill="#fff"/>
+          <!-- senyum -->
+          <path d="M35 37 Q40 41 45 37" stroke="#d97706" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <!-- pipi -->
+          <circle cx="29" cy="35" r="3" fill="#ffb3c6" opacity=".65"/>
+          <circle cx="51" cy="35" r="3" fill="#ffb3c6" opacity=".65"/>
+        </svg>
+        <span>Detektif Putri</span>
+      </div>
+
+      <div class="avatar-opt" data-avatar="putra">
+        <svg viewBox="0 0 80 96" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="40" cy="90" rx="24" ry="5" fill="#000" opacity=".08"/>
+          <!-- badan jas lab -->
+          <path d="M22 56 Q22 46 40 46 Q58 46 58 56 L60 88 Q40 92 20 88 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.6"/>
+          <!-- kemeja pink -->
+          <path d="M32 47 L40 62 L48 47 L44 46 L40 54 L36 46 Z" fill="#ff8fc8"/>
+          <!-- lengan -->
+          <rect x="12" y="56" width="11" height="26" rx="5.5" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.4"/>
+          <rect x="57" y="56" width="11" height="26" rx="5.5" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.4"/>
+          <!-- leher -->
+          <rect x="35" y="40" width="10" height="9" rx="4" fill="#f6c9a0"/>
+          <!-- wajah -->
+          <ellipse cx="40" cy="30" rx="15" ry="17" fill="#ffdcb8"/>
+          <!-- rambut pendek -->
+          <path d="M25 28 Q25 9 40 9 Q55 9 55 28 Q53 19 46 19 Q42 22 34 20 Q28 20 25 28 Z" fill="#2f2a26"/>
+          <!-- mata -->
+          <circle cx="34" cy="30" r="2.4" fill="#1e293b"/>
+          <circle cx="46" cy="30" r="2.4" fill="#1e293b"/>
+          <circle cx="34.8" cy="29.2" r=".9" fill="#fff"/>
+          <circle cx="46.8" cy="29.2" r=".9" fill="#fff"/>
+          <!-- alis -->
+          <path d="M30 25 L37 24.5" stroke="#2f2a26" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M43 24.5 L50 25" stroke="#2f2a26" stroke-width="1.8" stroke-linecap="round"/>
+          <!-- senyum -->
+          <path d="M35 37 Q40 41 45 37" stroke="#d97706" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span>Detektif Putra</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" id="btnMulai">🚀 MULAI PENJELAJAHAN</button>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     LAYAR 2 — LABORATORIUM VIRTUAL 3D
+     ══════════════════════════════════════════════════════════ -->
+<section id="screen-lab" class="screen">
+  <div id="labWrap">
+    <canvas id="labCanvas"></canvas>
+
+    <div id="labHint">🕹️ Geser joystick / tap gelas kimia</div>
+
+    <div class="hud">
+      <div class="hud-chip name">👤 <span id="hudNama">Detektif</span></div>
+      <div class="hud-chip point">⭐ <span id="hudPoin">0</span> poin</div>
+      <div class="hud-chip prog">🧪 <span id="hudProg">0/10</span></div>
+      <button class="hud-btn" id="btnSound" title="Suara">🔊</button>
+      <button class="hud-btn" id="btnJson" title="Unduh data JSON">💾</button>
+    </div>
+
+    <div id="joy"><div id="joyKnob">🕹️</div></div>
+
+    <button id="btnUji">🔬 Uji</button>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     LAYAR 3 — SOAL BERPIKIR KRITIS
+     ══════════════════════════════════════════════════════════ -->
+<section id="screen-quiz" class="screen">
+  <div class="quiz-head">
+    <h2>🧠 Berpikir Kritis</h2>
+    <div class="quiz-count" id="quizCount">1 / 6</div>
+  </div>
+
+  <div class="progress-outer"><div class="progress-inner" id="quizBar"></div></div>
+
+  <div class="q-card">
+    <span class="q-num" id="qNum">SOAL 1</span>
+    <p class="q-text" id="qText">…</p>
+    <div class="opts" id="qOpts"></div>
+    <div class="feedback" id="qFeedback"></div>
+    <button class="btn btn-primary" id="btnNext" style="display:none;">LANJUT ➡️</button>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     LAYAR 4 — SERTIFIKAT (RAMPING)
+     ══════════════════════════════════════════════════════════ -->
+<section id="screen-cert" class="screen">
+
+  <!-- 1. SERTIFIKAT -->
+  <div class="cert-card" id="certCard">
+    <div class="cert-inner">
+      <div class="cert-seal">🏅</div>
+      <div class="cert-school">SMA Santo Paulus Pontianak</div>
+      <h2 class="cert-title">SERTIFIKAT</h2>
+      <div class="cert-sub">Penghargaan Penyelesaian Gamifikasi Kimia</div>
+
+      <div class="cert-give">Diberikan dengan bangga kepada</div>
+      <div class="cert-name" id="certName">Nama Siswa</div>
+
+      <p class="cert-desc">
+        Telah berhasil menyelesaikan seluruh misi <b>Laboratorium Detektif Elektrolit</b>
+        dan mampu mengklasifikasikan serta membedakan larutan elektrolit dan
+        non-elektrolit berdasarkan daya hantar listriknya dengan sangat baik.
+      </p>
+
+      <div class="cert-scores">
+        <div class="cert-score"><span>NILAI</span><strong id="certNilai">100</strong></div>
+        <div class="cert-grade"><span>PREDIKAT</span><strong id="certGrade">A</strong></div>
+      </div>
+
+      <div class="cert-foot">
+        <div class="cert-teacher">
+          <div class="ttl">GURU KIMIA</div>
+          <div class="tname">Agustinus Ridwan, S.Pd.</div>
+        </div>
+      </div>
+
+      <div class="cert-date" id="certDate">Pontianak, 1 Januari 2025</div>
+    </div>
+  </div>
+
+  <!-- 2. UNDUH PDF -->
+  <button class="btn btn-green" id="btnPdf">⬇️ UNDUH SERTIFIKAT PDF</button>
+
+  <!-- 3. MAIN LAGI -->
+  <button class="btn btn-ghost" id="btnRestart">🔄 MAIN LAGI DARI AWAL</button>
+</section>
+
+</div><!-- /#app -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   ██  SECTION 1 — SISTEM SUARA (WEB AUDIO API MURNI)
+   ══════════════════════════════════════════════════════════════════ */
+const Sound = {
+  ctx: null,
+  enabled: true,
+  bgTimer: null,
+
+  /* Inisialisasi AudioContext */
+  init(){
+    if(!this.ctx){
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return;
+      this.ctx = new AC();
+    }
+    if(this.ctx.state === 'suspended') this.ctx.resume();
+  },
+
+  /* Main nada dasar */
+  tone(freq, dur = 0.15, type = 'sine', vol = 0.18, delay = 0){
+    if(!this.enabled || !this.ctx) return;
+    const t0 = this.ctx.currentTime + delay;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t0);
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(Math.max(vol, 0.0002), t0 + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.06);
+  },
+
+  /* Suara klik tombol */
+  click(){ this.tone(720, 0.09, 'triangle', 0.16, 0); },
+
+  /* Suara pilih avatar */
+  select(){ this.tone(880, 0.10, 'triangle', 0.16, 0); this.tone(1174, 0.12, 'triangle', 0.14, 0.09); },
+
+  /* Suara mulai (chord naik C-E-G-C) */
+  start(){
+    [523.25, 659.25, 783.99, 1046.50].forEach((f, i) =>
+      this.tone(f, 0.24, 'triangle', 0.17, i * 0.11));
+  },
+
+  /* Suara jawaban benar (C-E-G) */
+  correct(){
+    [523.25, 659.25, 783.99].forEach((f, i) =>
+      this.tone(f, 0.18, 'sine', 0.20, i * 0.09));
+  },
+
+  /* Suara jawaban salah */
+  wrong(){
+    this.tone(220, 0.22, 'sawtooth', 0.12, 0);
+    this.tone(165, 0.32, 'sawtooth', 0.12, 0.18);
+  },
+
+  /* Suara pengujian larutan (12 nada acak cepat) */
+  test(){
+    for(let i = 0; i < 12; i++){
+      const f = 400 + Math.random() * 950;
+      this.tone(f, 0.065, 'square', 0.055, i * 0.07);
+    }
+  },
+
+  /* Suara kemenangan */
+  fanfare(){
+    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+    notes.forEach((f, i) => this.tone(f, 0.20, 'triangle', 0.19, i * 0.14));
+    this.tone(1046.50, 1.0, 'sine', 0.15, 0.90);
+  },
+
+  /* Musik latar loop (8 nada bergantian tiap 780 ms) */
+  startBg(){
+    if(!this.enabled) return;
+    this.stopBg();
+    const notes = [523.25, 659.25, 783.99, 659.25, 587.33, 698.46, 880.00, 698.46];
+    let i = 0;
+    this.bgTimer = setInterval(() => {
+      if(!this.enabled || !this.ctx) return;
+      this.tone(notes[i % notes.length], 0.52, 'triangle', 0.045, 0);
+      i++;
+    }, 780);
+  },
+
+  /* Hentikan musik latar */
+  stopBg(){
+    if(this.bgTimer){ clearInterval(this.bgTimer); this.bgTimer = null; }
+  }
+};
+
+/* ══════════════════════════════════════════════════════════════════
+   ██  SECTION 2 — DATA & STATE
+   ══════════════════════════════════════════════════════════════════ */
+const STORAGE_KEY = 'labDetektifElektrolit_v5';
+
+const state = {
+  nama: '',
+  avatar: 'putri',
+  poinPraktikum: 0,
+  poinKritis: 0,
+  totalPoin: 0,
+  nilai: 0,
+  grade: 'C',
+  detailPraktikum: [],
+  detailKritis: [],
+  mulai: null,
+  selesai: null,
+  updated: null
+};
+
+/* ── Data 10 larutan ── */
+const LARUTAN = [
+  { nama:'Asam Klorida',       rumus:'HCl',       tipe:'kuat',  warna:0xbfe8ff },
+  { nama:'Natrium Hidroksida', rumus:'NaOH',      tipe:'kuat',  warna:0xd8cffc },
+  { nama:'Garam Dapur',        rumus:'NaCl',      tipe:'kuat',  warna:0xe6f2ff },
+  { nama:'Asam Cuka',          rumus:'CH₃COOH',   tipe:'lemah', warna:0xfff0bf },
+  { nama:'Amonia',             rumus:'NH₃',       tipe:'lemah', warna:0xd4f0ff },
+  { nama:'Asam Karbonat',      rumus:'H₂CO₃',     tipe:'lemah', warna:0xd9f7e5 },
+  { nama:'Glukosa',            rumus:'C₆H₁₂O₆',   tipe:'non',   warna:0xfff8d9 },
+  { nama:'Urea',               rumus:'CO(NH₂)₂',  tipe:'non',   warna:0xfffdf0 },
+  { nama:'Etanol',             rumus:'C₂H₅OH',    tipe:'non',   warna:0xeeffe4 },
+  { nama:'Air Jeruk Nipis',    rumus:'C₆H₈O₇',    tipe:'lemah', warna:0xe9ffc2 }
+];
+
+/* ── 6 Soal Berpikir Kritis ── */
+const SOAL_KRITIS = [
+  {
+    q: 'Larutan HCl dan CH₃COOH memiliki konsentrasi yang sama. Mengapa HCl menghantarkan listrik jauh lebih baik daripada CH₃COOH?',
+    opsi: [
+      'HCl memiliki molekul yang lebih besar sehingga arus listrik lebih mudah mengalir',
+      'HCl terionisasi sempurna (banyak ion), sedangkan CH₃COOH terionisasi sebagian (sedikit ion)',
+      'CH₃COOH tidak dapat larut di dalam air sehingga tidak ada partikel',
+      'HCl tidak bermuatan, sedangkan CH₃COOH bermuatan listrik'
+    ],
+    benar: 1,
+    bahas: 'Daya hantar listrik ditentukan oleh jumlah ion bebas. HCl memiliki α = 1 (terionisasi sempurna) sehingga ionnya sangat banyak, sedangkan CH₃COOH memiliki α kecil (terionisasi sebagian) sehingga ionnya sedikit.'
+  },
+  {
+    q: 'Seorang siswa menguji air garam dan air kelapa dengan alat uji elektrolit. Air garam menghasilkan banyak gelembung dengan lampu terang, sedangkan air kelapa menghasilkan sedikit gelembung dengan lampu redup. Kesimpulan yang paling tepat adalah…',
+    opsi: [
+      'Air garam elektrolit lemah, air kelapa non-elektrolit',
+      'Air garam elektrolit kuat, air kelapa elektrolit lemah',
+      'Keduanya merupakan elektrolit kuat',
+      'Keduanya merupakan larutan non-elektrolit'
+    ],
+    benar: 1,
+    bahas: 'Gelembung gas menandakan adanya ion yang bergerak. Gelembung banyak + lampu terang = elektrolit kuat (air garam). Gelembung sedikit + lampu redup = elektrolit lemah (air kelapa).'
+  },
+  {
+    q: 'Dua gelas berisi larutan bening tidak berwarna. Gelas A berisi larutan gula dan gelas B berisi larutan garam. Bagaimana cara paling tepat untuk membedakan keduanya?',
+    opsi: [
+      'Melihat warna kedua larutan dengan teliti',
+      'Membaui aroma masing-masing larutan',
+      'Menguji dengan alat uji elektrolit: larutan garam menyalakan lampu, larutan gula tidak',
+      'Menimbang massa kedua larutan dengan neraca'
+    ],
+    benar: 2,
+    bahas: 'Sifat elektrolit hanya dapat dibuktikan melalui uji daya hantar listrik. Larutan garam (NaCl) bersifat elektrolit kuat sehingga menyalakan lampu, sedangkan larutan gula (sukrosa) bersifat non-elektrolit sehingga lampu tidak menyala.'
+  },
+  {
+    q: 'Mengapa larutan glukosa (C₆H₁₂O₆) tidak dapat menghantarkan listrik?',
+    opsi: [
+      'Glukosa di dalam air tidak terurai menjadi ion, tetap berupa molekul netral',
+      'Glukosa menguap seluruhnya saat dilarutkan ke dalam air',
+      'Glukosa bereaksi dengan air membentuk gas hidrogen',
+      'Glukosa memiliki ion yang ukurannya terlalu besar'
+    ],
+    benar: 0,
+    bahas: 'Arus listrik dihantarkan oleh ion-ion bebas. Glukosa larut dalam air tetapi tidak terionisasi — tetap sebagai molekul netral. Karena tidak ada ion, larutan glukosa tidak dapat menghantarkan listrik.'
+  },
+  {
+    q: 'Air urea dan air sumur diuji dengan alat uji elektrolit. Air urea tidak menyalakan lampu, sedangkan air sumur menyalakan lampu redup. Penjelasan yang tepat untuk fenomena tersebut adalah…',
+    opsi: [
+      'Air urea elektrolit kuat, air sumur non-elektrolit',
+      'Air urea non-elektrolit, air sumur elektrolit lemah',
+      'Keduanya merupakan elektrolit kuat karena sama-sama larutan bening',
+      'Air sumur non-elektrolit karena mengandung banyak mineral'
+    ],
+    benar: 1,
+    bahas: 'Urea CO(NH₂)₂ tidak terionisasi dalam air sehingga bersifat non-elektrolit (lampu mati). Air sumur mengandung mineral terlarut yang terionisasi sebagian sehingga bersifat elektrolit lemah (lampu redup).'
+  },
+  {
+    q: 'Berdasarkan seluruh percobaan yang telah dilakukan, bagaimana hubungan antara jumlah ion di dalam larutan dengan daya hantar listriknya?',
+    opsi: [
+      'Semakin sedikit ion, semakin baik daya hantar listriknya',
+      'Jumlah ion sama sekali tidak memengaruhi daya hantar listrik',
+      'Semakin banyak ion, semakin baik daya hantar listriknya',
+      'Daya hantar listrik hanya dipengaruhi oleh warna larutan'
+    ],
+    benar: 2,
+    bahas: 'Daya hantar listrik berbanding lurus dengan jumlah ion bebas dalam larutan. Semakin banyak ion yang terbentuk, semakin baik larutan tersebut menghantarkan listrik.'
+  }
+];
+
+/* ══════════════════════════════════════════════════════════════════
+   ██  SECTION 3 — UTILITAS UMUM
+   ══════════════════════════════════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = $(id);
+  if(el) el.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function toast(msg, ms = 1800){
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tm);
+  t._tm = setTimeout(() => t.classList.remove('show'), ms);
+}
+
+function clampPoin(v){ return Math.max(0, v); }
+
+function tanggalIndo(){
+  const bulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const d = new Date();
+  return `${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+/* ── localStorage ── */
+function saveState(){
+  state.totalPoin = state.poinPraktikum + state.poinKritis;
+  state.updated = new Date().toISOString();
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }catch(e){ console.warn('Gagal simpan state', e); }
+}
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const obj = JSON.parse(raw);
+    Object.assign(state, obj);
+  }catch(e){ console.warn('Gagal muat state', e); }
+}
+
+/* ── Hitung nilai & predikat ── */
+function hitungNilai(){
+  const praktikum = Math.min(state.poinPraktikum, 100);
+  const kritis    = Math.min(state.poinKritis, 60);
+  let nilai = (praktikum / 100 * 50) + (kritis / 60 * 50);
+  nilai = Math.round(Math.max(0, Math.min(100, nilai)));
+  let grade = 'C';
+  if(nilai >= 90) grade = 'A';
+  else if(nilai >= 75) grade = 'B';
+  state.nilai = nilai;
+  state.grade = grade;
+  return nilai;
+}
+
+/* ── Unduh JSON ── */
+function downloadJSON(){
+  state.totalPoin = state.poinPraktikum + state.poinKritis;
+  state.updated = new Date().toISOString();
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `lab-detektif-elektrolit_${(state.nama || 'siswa').replace(/\s+/g, '_')}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+  toast('💾 Data JSON berhasil diunduh');
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   ██  SECTION 4 — LAYAR 1 : HOME (TAB, AVATAR, MULAI)
+   ══════════════════════════════════════════════════════════════════ */
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    Sound.init(); Sound.click();
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    const panel = $('tab-' + tab.dataset.tab);
+    if(panel) panel.classList.add('active');
+  });
+});
+
+document.querySelectorAll('.avatar-opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    Sound.init(); Sound.select();
+    document.querySelectorAll('.avatar-opt').forEach(o => o.classList.remove('sel'));
+    opt.classList.add('sel');
+    state.avatar = opt.dataset.avatar;
+    saveState();
+  });
+});
+
+/* Tombol MULAI */
+$('btnMulai').addEventListener('click', () => {
+  Sound.init();
+  const nama = $('inpNama').value.trim();
+  if(nama.length < 2){
+    toast('✏️ Nama minimal 2 karakter ya!');
+    $('inpNama').focus();
+    return;
+  }
+  state.nama = nama;
+  state.avatar = document.querySelector('.avatar-opt.sel')?.dataset.avatar || 'putri';
+  state.poinPraktikum = 0;
+  state.poinKritis = 0;
+  state.totalPoin = 0;
+  state.detailPraktikum = [];
+  state.detailKritis = [];
+  state.nilai = 0;
+  state.grade = 'C';
+  state.mulai = new Date().toISOString();
+  state.selesai = null;
+  saveState();
+
+  Sound.start();
+  Sound.startBg();
+
+  $('hudNama').textContent = state.nama;
+  updateHUD();
+
+  /* Inisialisasi lab 3D sekali saja */
+  if(!Lab.initialized){
+    Lab.init();
+  }
+  showScreen('screen-lab');
+  setTimeout(() => Lab.resize(), 60);
+
+  setTimeout(() => { const h = $('labHint'); if(h) h.style.opacity = '0'; }, 5000);
+});
+
+/* Isi nama dari storage */
+(function prefill(){
+  loadState();
+  if(state.nama) $('inpNama').value = state.nama;
+  if(state.avatar){
+    document.querySelectorAll('.avatar-opt').forEach(o => {
+      o.classList.toggle('sel', o.dataset.avatar === state.avatar);
+    });
+  }
+})();
+
+/* ══════════════════════════════════════════════════════════════════
+   ██  SECTION 5 — LAYAR 2 : LABORATORIUM VIRTUAL 3D
+   ══════════════════════════════════════════════════════════════════ */
+const ROOM_HALF = 18;   // setengah lebar ruangan
+const ROOM      = 14;   // tinggi ruangan
+const BEAKER_R  = 10;   // radius lingkaran penempatan gelas kimia
+const DETECT_R  = 3.6;  // radius deteksi interaksi
+
+const Lab = {
+  initialized: false,
+  running: false,
+  renderer: null,
+  scene: null,
+  camera: null,
+  clock: null,
+  player: null,
+  stations: [],
+  bubbles: [],
+  keys: {},
+  moveTarget: null,
+  nearStation: null,
+  testing: false,
+  testLight: null,
+  activeBulb: null,
+  lampIntensity: 0,
+  lampTarget: 0,
+  raycaster: null,
+  pointerNDC: null,
+  facing: 0,
+
+  /* ---------- INIT ---------- */
+  init(){
+    if(this.initialized) return;
+    const canvas = $('labCanvas');
+
+    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    this.renderer.shadowMap.enabled = false;
+    if(THREE.sRGBEncoding !== undefined){
+      this.renderer.outputEncoding = THREE.sRGBEncoding;
+    }
+
+    this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color(0xdff3ff);
+    this.scene.fog = new THREE.Fog(0xdff3ff, 32, 62);
+
+    this.camera = new THREE.PerspectiveCamera(56, 1, 0.1, 220);
+    this.camera.position.set(0, 7.5, 10);
+
+    this.clock = new THREE.Clock();
+    this.raycaster = new THREE.Raycaster();
+    this.pointerNDC = new THREE.Vector2();
+
+    this.buildLights();
+    this.buildEnvironment();
+    this.buildStations();
+    this.buildPlayer();
+
+    /* Cahaya lampu uji (dipakai bersama) */
+    this.testLight = new THREE.PointLight(0xffee66, 0, 9, 2);
+    this.testLight.position.set(0, 3.2, 0);
+    this.scene.add(this.testLight);
+
+    this.bindControls();
+    this.initialized = true;
+    this.running = true;
+    this.animate();
+    this.resize();
+  },
+
+  /* ---------- LIGHTS ---------- */
+  buildLights(){
+    this.scene.add(new THREE.AmbientLight(0xffffff, 0.82));
+    const hemi = new THREE.HemisphereLight(0xffffff, 0xd9e8ff, 0.55);
+    hemi.position.set(0, 20, 0);
+    this.scene.add(hemi);
+    const dir = new THREE.DirectionalLight(0xfff6e0, 0.62);
+    dir.position.set(9, 22, 11);
+    this.scene.add(dir);
+  },
+
+  /* ---------- ENVIRONMENT ---------- */
+  buildEnvironment(){
+    const scene = this.scene;
+    const W = ROOM_HALF, H = ROOM;
+
+    /* ---- Lantai keramik ---- */
+    const floorTex = this.makeFloorTexture();
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(W * 2, W * 2),
+      new THREE.MeshStandardMaterial({ map: floorTex, roughness: 0.72, metalness: 0.03 })
+    );
+    floor.rotation.x = -Math.PI / 2;
+    scene.add(floor);
+
+    /* ---- 4 Dinding ---- */
+    const wallMat = new THREE.MeshStandardMaterial({
+      color: 0xf8fbff, roughness: 0.96, side: THREE.DoubleSide
+    });
+    const wallDefs = [
+      { p: [0, H / 2, -W], r: [0, 0, 0] },
+      { p: [0, H / 2,  W], r: [0, Math.PI, 0] },
+      { p: [-W, H / 2, 0], r: [0, Math.PI / 2, 0] },
+      { p: [ W, H / 2, 0], r: [0, -Math.PI / 2, 0] }
+    ];
+    wallDefs.forEach(d => {
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(W * 2, H), wallMat);
+      m.position.set(d.p[0], d.p[1], d.p[2]);
+      m.rotation.set(d.r[0], d.r[1], d.r[2]);
+      scene.add(m);
+    });
+
+    /* ---- Pita warna aksen 4 dinding ---- */
+    const bands = [
+      { c: 0xffb347, p: [0, 6.2, -W + 0.2], r: 0 },        // oranye - utara
+      { c: 0xff9ecb, p: [0, 6.2,  W - 0.2], r: 0 },        // pink   - selatan
+      { c: 0xb79bff, p: [-W + 0.2, 6.2, 0], r: Math.PI / 2 }, // ungu - barat
+      { c: 0x7ee8fa, p: [ W - 0.2, 6.2, 0], r: Math.PI / 2 }  // cyan - timur
+    ];
+    bands.forEach(b => {
+      const mesh = new THREE.Mesh(
+        new THREE.BoxGeometry(W * 2, 0.9, 0.36),
+        new THREE.MeshStandardMaterial({ color: b.c, roughness: 0.55, emissive: b.c, emissiveIntensity: 0.14 })
+      );
+      mesh.position.set(b.p[0], b.p[1], b.p[2]);
+      mesh.rotation.y = b.r;
+      scene.add(mesh);
+    });
+
+    /* ---- Poster Tabel Periodik (dinding utara, kiri atas) ---- */
+    const posterTex = this.makePosterTexture();
+    const poster = new THREE.Mesh(
+      new THREE.PlaneGeometry(6.4, 4.2),
+      new THREE.MeshStandardMaterial({ map: posterTex, roughness: 0.85 })
+    );
+    poster.position.set(-9.5, 5.4, -W + 0.09);
+    scene.add(poster);
+
+    /* ---- Rambu K3 ---- */
+    this.addSign('APD WAJIB', '#facc15', '#78350f', -3.6, 6.0, -W + 0.1);
+    this.addSign('NO FOOD',   '#f87171', '#7f1d1d', -0.2, 6.0, -W + 0.1);
+    this.addSign('CUCI TANGAN','#34d399', '#064e3b', 3.2, 6.0, -W + 0.1);
+
+    /* ---- Fume hood (lemari asam) biru di kanan dinding utara ---- */
+    this.buildFumeHood(11.5, -W + 1.7);
+
+    /* ---- Rak dinding botol kimia (dinding barat) ---- */
+    this.buildShelf(-W + 0.55, 0);
+
+    /* ---- Lemari bawah + knob emas (dinding selatan) ---- */
+    this.buildCabinet(0, W - 0.7);
+
+    /* ---- Lampu langit-langit panel kuning 3×3 ---- */
+    const panelMat = new THREE.MeshStandardMaterial({
+      color: 0xfff3c4, emissive: 0xffe680, emissiveIntensity: 0.85, roughness: 0.4
+    });
+    for(let i = -1; i <= 1; i++){
+      for(let j = -1; j <= 1; j++){
+        const p = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.22, 1.5), panelMat);
+        p.position.set(i * 7.4, H - 0.55, j * 6.2);
+        scene.add(p);
+      }
+    }
+
+    /* ---- Ring penanda lantai tengah ---- */
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(1.9, 2.35, 56),
+      new THREE.MeshStandardMaterial({
+        color: 0xff8fc8, emissive: 0xff5fa8, emissiveIntensity: 0.45,
+        side: THREE.DoubleSide, transparent: true, opacity: 0.85
+      })
+    );
+    ring.rotation.x = -Math.PI / 2;
+    ring.position.y = 0.02;
+    scene.add(ring);
+  },
+
+  /* ---------- Tekstur lantai keramik ---------- */
+  makeFloorTexture(){
+    const c = document.createElement('canvas');
+    c.width = c.height = 512;
+    const x = c.getContext('2d');
+    const n = 8, s = 512 / n;
+    for(let i = 0; i < n; i++){
+      for(let j = 0; j < n; j++){
+        const even = (i + j) % 2 === 0;
+        x.fillStyle = even ? '#eaf6ff' : '#fff6d6';
+        x.fillRect(i * s, j * s, s, s);
+      }
+    }
+    x.strokeStyle = '#c9d9e8';
+    x.lineWidth = 4;
+    for(let i = 0; i <= n; i++){
+      x.beginPath(); x.moveTo(i * s, 0); x.lineTo(i * s, 512); x.stroke();
+      x.beginPath(); x.moveTo(0, i * s); x.lineTo(512, i * s); x.stroke();
+    }
+    const t = new THREE.CanvasTexture(c);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.repeat.set(6, 6);
+    return t;
+  },
+
+  /* ---------- Tekstur poster tabel periodik ---------- */
+  makePosterTexture(){
+    const c = document.createElement('canvas');
+    c.width = 640; c.height = 420;
+    const x = c.getContext('2d');
+    x.fillStyle = '#ffffff'; x.fillRect(0, 0, 640, 420);
+    x.fillStyle = '#1e293b'; x.font = 'bold 30px sans-serif';
+    x.textAlign = 'center';
+    x.fillText('TABEL PERIODIK UNSUR', 320, 40);
+    /* grid unsur mini */
+    const cols = 18, rows = 7, cw = 30, ch = 42, ox = 32, oy = 62;
+    const colors = ['#fca5a5','#fdba74','#fde68a','#bef264','#86efac','#7dd3fc','#c4b5fd','#f9a8d4'];
+    let k = 0;
+    for(let r = 0; r < rows; r++){
+      for(let cc = 0; cc < cols; cc++){
+        if(r > 0 && (cc < 2 || cc > 15)) continue;
+        x.fillStyle = colors[(r + cc) % colors.length];
+        x.fillRect(ox + cc * cw, oy + r * ch, cw - 3, ch - 4);
+        x.fillStyle = '#1e293b'; x.font = 'bold 10px sans-serif';
+        x.fillText(String(++k), ox + cc * cw + 13, oy + r * ch + 24);
+      }
+    }
+    return new THREE.CanvasTexture(c);
+  },
+
+  /* ---------- Rambu dinding ---------- */
+  addSign(text, bg, fg, x, y, z){
+    const c = document.createElement('canvas');
+    c.width = 256; c.height = 128;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = bg;
+    this.roundRect(ctx, 6, 6, 244, 116, 20); ctx.fill();
+    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 6;
+    this.roundRect(ctx, 6, 6, 244, 116, 20); ctx.stroke();
+    ctx.fillStyle = fg;
+    ctx.font = 'bold 34px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, 128, 66);
+    const tex = new THREE.CanvasTexture(c);
+    const m = new THREE.Mesh(
+      new THREE.PlaneGeometry(2.0, 1.0),
+      new THREE.MeshStandardMaterial({ map: tex, roughness: 0.9 })
+    );
+    m.position.set(x, y, z);
+    this.scene.add(m);
+  },
+
+  /* ---------- Fume hood ---------- */
+  buildFumeHood(x, z){
+    const g = new THREE.Group();
+    const bodyMat = new THREE.MeshStandardMaterial({ color: 0x60a5fa, roughness: 0.55, metalness: 0.15 });
+    const glassMat = new THREE.MeshStandardMaterial({
+      color: 0xdff1ff, transparent: true, opacity: 0.35,
+      roughness: 0.15, metalness: 0.1
+    });
+
+    const body = new THREE.Mesh(new THREE.BoxGeometry(4.4, 4.6, 2.2), bodyMat);
+    body.position.y = 2.3; g.add(body);
+
+    const interior = new THREE.Mesh(new THREE.BoxGeometry(3.8, 2.4, 1.7),
+      new THREE.MeshStandardMaterial({ color: 0xe0f2fe, roughness: 0.85 }));
+    interior.position.set(0, 2.6, 0.15); g.add(interior);
+
+    const glass = new THREE.Mesh(new THREE.BoxGeometry(4.0, 1.6, 0.12), glassMat);
+    glass.position.set(0, 3.6, 1.16); g.add(glass);
+
+    const top = new THREE.Mesh(new THREE.BoxGeometry(4.6, 0.3, 2.4), bodyMat);
+    top.position.y = 4.75; g.add(top);
+
+    const knob = new THREE.Mesh(new THREE.SphereGeometry(0.14, 12, 12),
+      new THREE.MeshStandardMaterial({ color: 0xfbbf24, metalness: 0.85, roughness: 0.25 }));
+    knob.position.set(1.7, 1.6, 1.2); g.add(knob);
+
+    g.position.set(x, 0, z);
+    this.scene.add(g);
+  },
+
+  /* ---------- Rak dinding botol kimia ---------- */
+  buildShelf(x, z){
+    const g = new THREE.Group();
+    const woodMat = new THREE.MeshStandardMaterial({ color: 0xf1e0c4, roughness: 0.8 });
+    const bottleColors = [0xf87171,0xfbbf24,0x4ade80,0x60a5fa,0xc084fc,0xf472b6,
+                          0x22d3ee,0xa3e635,0xfb923c,0xe879f9,0x38bdf8,0xfacc15,
+                          0x34d399,0xfca5a5,0xa78bfa,0xfdba74,0x86efac,0x93c5fd];
+
+    for(let level = 0; level < 3; level++){
+      const y = 2.2 + level * 1.75;
+      const shelf = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.16, 14), woodMat);
+      shelf.position.set(0, y, 0);
+      g.add(shelf);
+
+      for(let i = 0; i < 6; i++){
+        const zz = -5.6 + i * 2.25;
+        const h = 0.7 + Math.random() * 0.4;
+        const col = bottleColors[(level * 6 + i) % bottleColors.length];
+        const bottle = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.24, 0.28, h, 12),
+          new THREE.MeshStandardMaterial({
+            color: col, roughness: 0.28, metalness: 0.1,
+            transparent: true, opacity: 0.88
+          })
+        );
+        bottle.position.set(0, y + 0.08 + h / 2, zz);
+        g.add(bottle);
+
+        const neck = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.09, 0.09, 0.22, 10),
+          new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.4 })
+        );
+        neck.position.set(0, y + 0.08 + h + 0.11, zz);
+        g.add(neck);
+      }
+    }
+    g.position.set(x, 0, z);
+    g.rotation.y = Math.PI / 2;
+    this.scene.add(g);
+  },
+
+  /* ---------- Lemari bawah ---------- */
+  buildCabinet(x, z){
+    const g = new THREE.Group();
+    const mat = new THREE.MeshStandardMaterial({ color: 0xe8f1fb, roughness: 0.75 });
+    const body = new THREE.Mesh(new THREE.BoxGeometry(9, 2.4, 1.2), mat);
+    body.position.y = 1.2; g.add(body);
+
+    const lineMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, roughness: 0.8 });
+    for(let i = -1; i <= 1; i++){
+      const divider = new THREE.Mesh(new THREE.BoxGeometry(0.12, 2.3, 1.25), lineMat);
+      divider.position.set(i * 3, 1.2, 0);
+      g.add(divider);
+    }
+
+    /* knob emas */
+    const goldMat = new THREE.MeshStandardMaterial({ color: 0xfbbf24, metalness: 0.9, roughness: 0.22 });
+    for(let i = -1; i <= 1; i++){
+      const k = new THREE.Mesh(new THREE.SphereGeometry(0.15, 12, 12), goldMat);
+      k.position.set(i * 3 + 1.5, 1.9, 0.66);
+      g.add(k);
+      const k2 = new THREE.Mesh(new THREE.SphereGeometry(0.15, 12, 12), goldMat);
+      k2.position.set(i * 3 - 1.5, 1.9, 0.66);
+      g.add(k2);
+    }
+
+    const topSlab = new THREE.Mesh(new THREE.BoxGeometry(9.4, 0.16, 1.4),
+      new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.5 }));
+    topSlab.position.y = 2.48; g.add(topSlab);
+
+    g.position.set(x, 0, z);
+    g.rotation.y = Math.PI;
+    this.scene.add(g);
+  },
+
+  /* ---------- Round rect helper (canvas 2D) ---------- */
+  roundRect(ctx, x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  },
+
+  /* ---------- Sprite label gelas kimia ---------- */
+  makeLabelSprite(rumus, nama, hexColor){
+    const c = document.createElement('canvas');
+    c.width = 512; c.height = 256;
+    const x = c.getContext('2d');
+    x.clearRect(0, 0, 512, 256);
+
+    x.fillStyle = 'rgba(255,255,255,0.96)';
+    this.roundRect(x, 16, 18, 480, 220, 46); x.fill();
+
+    const stroke = '#' + hexColor.toString(16).padStart(6, '0');
+    x.lineWidth = 12;
+    x.strokeStyle = stroke;
+    this.roundRect(x, 16, 18, 480, 220, 46); x.stroke();
+
+    x.textAlign = 'center';
+    x.textBaseline = 'middle';
+    x.fillStyle = '#0f172a';
+    x.font = 'bold 86px "Baloo 2", sans-serif';
+    x.fillText(rumus, 256, 104);
+
+    x.fillStyle = '#64748b';
+    x.font = '600 38px "Nunito", sans-serif';
+    x.fillText(nama, 256, 186);
+
+    const tex = new THREE.CanvasTexture(c);
+    return tex;
+  },
+
+  /* ---------- Bangun 10 stasiun gelas kimia ---------- */
+  buildStations(){
+    const scene = this.scene;
+
+    const tableMat  = new THREE.MeshStandardMaterial({ color: 0xf3e8d6, roughness: 0.72 });
+    const legMat    = new THREE.MeshStandardMaterial({ color: 0xd9c9ae, roughness: 0.8 });
+    const coasterMat= new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.55 });
+    const glassMat  = new THREE.MeshStandardMaterial({
+      color: 0xffffff, transparent: true, opacity: 0.30,
+      roughness: 0.08, metalness: 0.05, side: THREE.DoubleSide
+    });
+    const postMat   = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.7, roughness: 0.3 });
+
+    LARUTAN.forEach((data, i) => {
+      const angle = (i / LARUTAN.length) * Math.PI * 2 - Math.PI / 2;
+      const px = Math.cos(angle) * BEAKER_R;
+      const pz = Math.sin(angle) * BEAKER_R;
+
+      const g = new THREE.Group();
+      g.position.set(px, 0, pz);
+      g.userData.stationIndex = i;
+
+      /* -- Meja lab -- */
+      const top = new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.22, 2.9), tableMat);
+      top.position.y = 1.0;
+      g.add(top);
+
+      for(const sx of [-1.2, 1.2]){
+        for(const sz of [-1.2, 1.2]){
+          const leg = new THREE.Mesh(new THREE.BoxGeometry(0.2, 1.0, 0.2), legMat);
+          leg.position.set(sx, 0.5, sz);
+          g.add(leg);
+        }
+      }
+
+      /* -- Alas / coaster -- */
+      const coaster = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.85, 0.08, 24), coasterMat);
+      coaster.position.y = 1.15;
+      g.add(coaster);
+
+      /* -- Gelas kimia (transparan) -- */
+      const glass = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 1.25, 26, 1, true), glassMat);
+      glass.position.y = 1.82;
+      g.add(glass);
+
+      const glassBottom = new THREE.Mesh(new THREE.CircleGeometry(0.58, 26), glassMat);
+      glassBottom.rotation.x = -Math.PI / 2;
+      glassBottom.position.y = 1.20;
+      g.add(glassBottom);
+
+      /* -- Cairan berwarna -- */
+      const liquidMat = new THREE.MeshStandardMaterial({
+        color: data.warna, transparent: true, opacity: 0.86,
+        roughness: 0.22, metalness: 0.02,
+        emissive: data.warna, emissiveIntensity: 0.14
+      });
+      const liquid = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.52, 0.72, 26), liquidMat);
+      liquid.position.y = 1.58;
+      g.add(liquid);
+
+      /* -- Tiang lampu -- */
+      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 1.65, 10), postMat);
+      post.position.set(1.02, 1.94, 0);
+      g.add(post);
+
+      const basePost = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.26, 0.12, 14), postMat);
+      basePost.position.set(1.02, 1.17, 0);
+      g.add(basePost);
+
+      /* -- Bohlam -- */
+      const bulbMat = new THREE.MeshStandardMaterial({
+        color: 0xf1f5f9, emissive: 0x000000, emissiveIntensity: 0,
+        roughness: 0.25, transparent: true, opacity: 0.94
+      });
+      const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.26, 18, 18), bulbMat);
+      bulb.position.set(1.02, 2.92, 0);
+      g.add(bulb);
+
+      /* -- Label sprite -- */
+      const labelTex = this.makeLabelSprite(data.rumus, data.nama, 0xec4899);
+      const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: labelTex, transparent: true }));
+      label.scale.set(2.9, 1.45, 1);
+      label.position.set(0, 3.85, 0);
+      g.add(label);
+
+      /* -- Cincin penanda pink di lantai -- */
+      const ring = new THREE.Mesh(
+        new THREE.RingGeometry(1.85, 2.12, 44),
+        new THREE.MeshStandardMaterial({
+          color: 0xff8fc8, emissive: 0xff5fa8, emissiveIntensity: 0.5,
+          side: THREE.DoubleSide, transparent: true, opacity: 0.8
+        })
+      );
+      ring.rotation.x = -Math.PI / 2;
+      ring.position.y = 0.03;
+      g.add(ring);
+
+      scene.add(g);
+
+      this.stations.push({
+        index: i,
+        data,
+        group: g,
+        pos: new THREE.Vector3(px, 0, pz),
+        bulbMat,
+        bulb,
+        liquidMat,
+        ring,
+        bubbles: [],
+        bubbling: false,
+        tested: false
+      });
+    });
+  },
+
+  /* ---------- Karakter Detektif ---------- */
+  buildPlayer(){
+    const g = new THREE.Group();
+
+    const skinMat   = new THREE.MeshStandardMaterial({ color: 0xffdcb8, roughness: 0.65 });
+    const coatMat   = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.62 });
+    const shirtMat  = new THREE.MeshStandardMaterial({ color: 0xff8fc8, roughness: 0.6 });
+    const pantsMat  = new THREE.MeshStandardMaterial({ color: 0x5b7cfa, roughness: 0.7 });
+    const hairMat   = new THREE.MeshStandardMaterial({
+      color: state.avatar === 'putri' ? 0x4a2c17 : 0x2f2a26, roughness: 0.85
+    });
+    const shoeMat   = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.7 });
+
+    /* Kaki */
+    for(const sx of [-0.17, 0.17]){
+      const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.11, 0.78, 12), pantsMat);
+      leg.position.set(sx, 0.39, 0);
+      g.add(leg);
+      const shoe = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.14, 0.34), shoeMat);
+      shoe.position.set(sx, 0.07, 0.06);
+      g.add(shoe);
+    }
+
+    /* Jas lab */
+    const coat = new THREE.Mesh(new THREE.CylinderGeometry(0.40, 0.50, 1.05, 18), coatMat);
+    coat.position.y = 1.30;
+    g.add(coat);
+
+    /* Kemeja pink (di depan) */
+    const shirt = new THREE.Mesh(new THREE.BoxGeometry(0.30, 0.72, 0.10), shirtMat);
+    shirt.position.set(0, 1.36, 0.42);
+    g.add(shirt);
+
+    /* Lengan */
+    for(const sx of [-0.50, 0.50]){
+      const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.10, 0.86, 12), coatMat);
+      arm.position.set(sx, 1.32, 0);
+      arm.rotation.z = sx > 0 ? -0.13 : 0.13;
+      g.add(arm);
+      const hand = new THREE.Mesh(new THREE.SphereGeometry(0.115, 12, 12), skinMat);
+      hand.position.set(sx + (sx > 0 ? 0.06 : -0.06), 0.88, 0);
+      g.add(hand);
+    }
+
+    /* Leher */
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.14, 10), skinMat);
+    neck.position.y = 1.90;
+    g.add(neck);
+
+    /* Kepala */
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.32, 20, 20), skinMat);
+    head.position.y = 2.20;
+    g.add(head);
+
+    /* Rambut */
+    if(state.avatar === 'putri'){
+      const hairTop = new THREE.Mesh(new THREE.SphereGeometry(0.345, 20, 20, 0, Math.PI * 2, 0, Math.PI * 0.62), hairMat);
+      hairTop.position.y = 2.24;
+      g.add(hairTop);
+      const hairBack = new THREE.Mesh(new THREE.BoxGeometry(0.50, 0.72, 0.22), hairMat);
+      hairBack.position.set(0, 1.92, -0.20);
+      g.add(hairBack);
+      for(const sx of [-0.26, 0.26]){
+        const strand = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.62, 0.20), hairMat);
+        strand.position.set(sx, 1.94, -0.05);
+        g.add(strand);
+      }
+    } else {
+      const hairTop = new THREE.Mesh(new THREE.SphereGeometry(0.345, 20, 20, 0, Math.PI * 2, 0, Math.PI * 0.56), hairMat);
+      hairTop.position.y = 2.24;
+      g.add(hairTop);
+      const fringe = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.16, 0.24), hairMat);
+      fringe.position.set(0, 2.32, 0.18);
+      g.add(fringe);
+    }
+
+    /* Mata */
+    for(const sx of [-0.11, 0.11]){
+      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 10),
+        new THREE.MeshStandardMaterial({ color: 0x1e293b }));
+      eye.position.set(sx, 2.22, 0.29);
+      g.add(eye);
+    }
+
+    /* Badge nama di atas kepala */
+    const nameCanvas = document.createElement('canvas');
+    nameCanvas.width = 512; nameCanvas.height = 128;
+    const nx = nameCanvas.getContext('2d');
+    nx.fillStyle = 'rgba(255,255,255,0.94)';
+    this.roundRect(nx, 8, 24, 496, 80, 34); nx.fill();
+    nx.strokeStyle = '#a855f7'; nx.lineWidth = 7;
+    this.roundRect(nx, 8, 24, 496, 80, 34); nx.stroke();
+    nx.fillStyle = '#7c3aed';
+    nx.font = 'bold 46px "Baloo 2", sans-serif';
+    nx.textAlign = 'center'; nx.textBaseline = 'middle';
+    nx.fillText(state.nama.slice(0, 16), 256, 66);
+    const nameSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: new THREE.CanvasTexture(nameCanvas), transparent: true
+    }));
+    nameSprite.scale.set(2.2, 0.55, 1);
+    nameSprite.position.y = 2.95;
+    g.add(nameSprite);
+
+    g.position.set(0, 0, 0);
+    this.scene.add(g);
+    this.player = g;
+  },
+
+  /* ---------- Kontrol: joystick, tap, keyboard ---------- */
+  bindControls(){
+    const canvas = $('labCanvas');
+    const joyEl = $('joy');
+    const knobEl = $('joyKnob');
+    const JOY_MAX = 44;
+    let joyId = null;
+    let cx = 0, cy = 0;
+
+    const setJoy = (e) => {
+      let dx = e.clientX - cx;
+      let dy = e.clientY - cy;
+      const len = Math.hypot(dx, dy);
+      if(len > JOY_MAX){ dx = dx / len * JOY_MAX; dy = dy / len * JOY_MAX; }
+      knobEl.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+      Lab.joy = { dx: dx / JOY_MAX, dy: dy / JOY_MAX };
+      Lab.moveTarget = null;
+    };
+
+    joyEl.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      joyId = e.pointerId;
+      joyEl.setPointerCapture(e.pointerId);
+      const r = joyEl.getBoundingClientRect();
+      cx = r.left + r.width / 2;
+      cy = r.top + r.height / 2;
+      setJoy(e);
+    });
+    joyEl.addEventListener('pointermove', (e) => {
+      if(e.pointerId !== joyId) return;
+      e.preventDefault();
+      setJoy(e);
+    });
+    const endJoy = (e) => {
+      if(e.pointerId !== joyId) return;
+      joyId = null;
+      Lab.joy = { dx: 0, dy: 0 };
+      knobEl.style.transform = 'translate(-50%,-50%)';
+    };
+    joyEl.addEventListener('pointerup', endJoy);
+    joyEl.addEventListener('pointercancel', endJoy);
+
+    /* Tap-to-walk */
+    canvas.addEventListener('pointerdown', (e) => {
+      if(!Lab.running || Lab.testing) return;
+      if(document.querySelector('.modal.show')) return;
+      const r = canvas.getBoundingClientRect();
+      Lab.pointerNDC.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+      Lab.pointerNDC.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+      Lab.raycaster.setFromCamera(Lab.pointerNDC, Lab.camera);
+
+      const groups = Lab.stations.map(s => s.group);
+      const hits = Lab.raycaster.intersectObjects(groups, true);
+      if(hits.length === 0) return;
+
+      let obj = hits[0].object;
+      let idx = undefined;
+      while(obj){
+        if(obj.userData && obj.userData.stationIndex !== undefined){
+          idx = obj.userData.stationIndex;
+          break;
+        }
+        obj = obj.parent;
+      }
+      if(idx === undefined) return;
+
+      const st = Lab.stations[idx];
+      const dir = new THREE.Vector3(
+        Lab.player.position.x - st.pos.x, 0,
+        Lab.player.position.z - st.pos.z
+      );
+      if(dir.lengthSq() < 0.001) dir.set(0, 0, 1);
+      dir.normalize();
+      Lab.moveTarget = new THREE.Vector3(
+        st.pos.x + dir.x * 2.5, 0,
+        st.pos.z + dir.z * 2.5
+      );
+    });
+
+    /* Keyboard */
+    window.addEventListener('keydown', (e) => {
+      const k = e.key.toLowerCase();
+      if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(k)){
+        Lab.keys[k] = true;
+        Lab.moveTarget = null;
+        if(Lab.running) e.preventDefault();
+      }
+    });
+    window.addEventListener('keyup', (e) => {
+      Lab.keys[e.key.toLowerCase()] = false;
+    });
+
+    /* Resize */
+    window.addEventListener('resize', () => Lab.resize());
+    window.addEventListener('orientationchange', () => setTimeout(() => Lab.resize(), 250));
+  },
+
+  joy: { dx: 0, dy: 0 },
+
+  /* ---------- Resize ---------- */
+  resize(){
+    if(!this.renderer) return;
+    const canvas = $('labCanvas');
+    const wrap = $('labWrap');
+    const w = (canvas.clientWidth || wrap.clientWidth || 360);
+    const h = (canvas.clientHeight || wrap.clientHeight || 640);
+    if(w < 2 || h < 2) return;
+    this.renderer.setSize(w, h, false);
+    this.camera.aspect = w / h;
+    this.camera.updateProjectionMatrix();
+  },
+
+  /* ---------- Loop animasi ---------- */
+  animate(){
+    requestAnimationFrame(() => Lab.animate());
+    if(!Lab.running || !Lab.renderer) return;
+
+    const dt = Math.min(Lab.clock.getDelta(), 0.05);
+
+    Lab.updatePlayer(dt);
+    Lab.updateBubbles(dt);
+    Lab.updateLamp(dt);
+    Lab.updateProximity();
+
+    Lab.renderer.render(Lab.scene, Lab.camera);
+  },
+
+  /* ---------- Update pemain ---------- */
+  updatePlayer(dt){
+    const SPEED = 5.4;
+    let vx = 0, vz = 0;
+
+    /* Keyboard */
+    if(this.keys['w'] || this.keys['arrowup'])    vz -= 1;
+    if(this.keys['s'] || this.keys['arrowdown'])  vz += 1;
+    if(this.keys['a'] || this.keys['arrowleft'])  vx -= 1;
+    if(this.keys['d'] || this.keys['arrowright']) vx += 1;
+
+    /* Joystick */
+    if(Math.abs(this.joy.dx) > 0.08 || Math.abs(this.joy.dy) > 0.08){
+      vx += this.joy.dx;
+      vz += this.joy.dy;
+    }
+
+    const len = Math.hypot(vx, vz);
+    if(len > 0.05){
+      vx /= len; vz /= len;
+      this.player.position.x += vx * SPEED * dt;
+      this.player.position.z += vz * SPEED * dt;
+      this.facing = Math.atan2(vx, vz);
+    } else if(this.moveTarget){
+      const dx = this.moveTarget.x - this.player.position.x;
+      const dz = this.moveTarget.z - this.player.position.z;
+      const d = Math.hypot(dx, dz);
+      if(d < 0.18){
+        this.moveTarget = null;
+      } else {
+        this.player.position.x += (dx / d) * SPEED * dt;
+        this.player.position.z += (dz / d) * SPEED * dt;
+        this.facing = Math.atan2(dx / d, dz / d);
+      }
+    }
+
+    /* Batas ruangan */
+    const LIM = ROOM_HALF - 1.4;
+    this.player.position.x = Math.max(-LIM, Math.min(LIM, this.player.position.x));
+    this.player.position.z = Math.max(-LIM, Math.min(LIM, this.player.position.z));
+
+    /* Rotasi halus */
+    let cur = this.player.rotation.y;
+    let diff = this.facing - cur;
+    while(diff > Math.PI) diff -= Math.PI * 2;
+    while(diff < -Math.PI) diff += Math.PI * 2;
+    this.player.rotation.y = cur + diff * Math.min(1, dt * 12);
+
+    /* Kamera mengikuti */
+    const camX = Math.max(-ROOM_HALF + 1.5, Math.min(ROOM_HALF - 1.5, this.player.position.x));
+    const camZ = Math.max(-ROOM_HALF + 1.5, Math.min(ROOM_HALF - 1.5, this.player.position.z + 8.4));
+    const target = new THREE.Vector3(camX, 7.2, camZ);
+    this.camera.position.lerp(target, Math.min(1, dt * 5.5));
+    this.camera.lookAt(this.player.position.x, this.player.position.y + 1.5, this.player.position.z);
+  },
+
+  /* ---------- Update gelembung ---------- */
+  updateBubbles(dt){
+    for(const st of this.stations){
+      if(!st.bubbling) continue;
+      for(const b of st.bubbles){
+        b.position.y += b.userData.speed * dt;
+        if(b.position.y > 2.30){
+          b.position.y = 1.24;
+          const a = Math.random() * Math.PI * 2;
+          const r = Math.random() * 0.4;
+          b.position.x = Math.cos(a) * r;
+          b.position.z = Math.sin(a) * r;
+        }
+        b.scale.setScalar(0.75 + Math.sin(performance.now() * 0.008 + b.userData.seed) * 0.25);
+      }
+    }
+  },
+
+  /* ---------- Update lampu uji ---------- */
+  updateLamp(dt){
+    if(!this.testLight) return;
+    this.lampIntensity += (this.lampTarget - this.lampIntensity) * Math.min(1, dt * 6);
+    this.testLight.intensity = this.lampIntensity;
+
+    if(this.activeBulb){
+      const mat = this.activeBulb.material;
+      const targetEmissive = this.lampTarget > 0.5 ? 1.0 : (this.lampTarget > 0.1 ? 0.4 : 0);
+      mat.emissiveIntensity += (targetEmissive - mat.emissiveIntensity) * Math.min(1, dt * 6);
+    }
+  },
+
+  /* ---------- Cek kedekatan gelas ---------- */
+  updateProximity(){
+    if(this.testing){ return; }
+    let nearest = null;
+    let nd = DETECT_R;
+    for(const st of this.stations){
+      if(st.tested) continue;
+      const d = Math.hypot(this.player.position.x - st.pos.x, this.player.position.z - st.pos.z);
+      if(d < nd){ nd = d; nearest = st; }
+    }
+    this.nearStation = nearest;
+    const btn = $('btnUji');
+    if(nearest){
+      btn.textContent = `🔬 Uji ${nearest.data.rumus}`;
+      btn.classList.add('show');
+    } else {
+      btn.classList.remove('show');
+    }
+  },
+
+  /* ---------- Jalankan uji larutan ---------- */
+  runTest(station){
+    if(this.testing || !station) return;
+    this.testing = true;
+    $('btnUji').classList.remove('show');
+    Sound.test();
+
+    const tipe = station.data.tipe;
+
+    /* Warna & intensitas lampu */
+    let color, intensity, bubbleCount;
+    if(tipe === 'kuat'){
+      color = 0xffee55; intensity = 2.3; bubbleCount = 24;
+    } else if(tipe === 'lemah'){
+      color = 0xffe9a8; intensity = 0.65; bubbleCount = 8;
+    } else {
+      color = 0x445566; intensity = 0; bubbleCount = 0;
+    }
+
+    this.testLight.color.setHex(color);
+    this.testLight.position.set(station.pos.x + 1.02, 3.0, station.pos.z);
+    this.lampIntensity = 0;
+    this.lampTarget = intensity;
+    this.activeBulb = station.bulb;
+    station.bulbMat.emissive.setHex(tipe === 'non' ? 0x000000 : color);
+    station.bulbMat.emissiveIntensity = 0;
+    station.bulbMat.color.setHex(tipe === 'non' ? 0xdbe3ec : 0xfffbe0);
+
+    /* Gelembung */
+    if(bubbleCount > 0){
+      this.spawnBubbles(station, bubbleCount);
+      station.bubbling = true;
+    }
+
+    /* Selesai animasi 2.6 detik → tampilkan modal */
+    setTimeout(() => {
+      station.bubbling = false;
+      this.removeBubbles(station);
+      this.testing = false;
+      this.openResultModal(station);
+    }, 2600);
+  },
+
+  spawnBubbles(station, count){
+    const geo = new THREE.SphereGeometry(0.062, 8, 8);
+    for(let i = 0; i < count; i++){
+      const mat = new THREE.MeshStandardMaterial({
+        color: 0xffffff, emissive: 0xa8e8ff, emissiveIntensity: 0.8,
+        transparent: true, opacity: 0.78, roughness: 0.15
+      });
+      const b = new THREE.Mesh(geo, mat);
+      const a = Math.random() * Math.PI * 2;
+      const r = Math.random() * 0.40;
+      b.position.set(Math.cos(a) * r, 1.24 + Math.random() * 0.35, Math.sin(a) * r);
+      b.userData.speed = 0.45 + Math.random() * 0.55;
+      b.userData.seed = Math.random() * 10;
+      station.group.add(b);
+      station.bubbles.push(b);
+    }
+  },
+
+  removeBubbles(station){
+    station.bubbles.forEach(b => {
+      station.group.remove(b);
+      if(b.material) b.material.dispose();
+    });
+    station.bubbles = [];
+  },
+
+  /* ---------- Modal hasil pengamatan ---------- */
+  openResultModal(station){
+    const d = station.data;
+    const obs = d.tipe === 'kuat'
+      ? ['💡 Lampu menyala TERANG', '🫧 Banyak gelembung gas']
+      : d.tipe === 'lemah'
+        ? ['💡 Lampu menyala REDUP', '🫧 Sedikit gelembung gas']
+        : ['💡 Lampu TIDAK menyala', '🚫 Tidak ada gelembung'];
+
+    const modal = document.createElement('div');
+    modal.className = 'modal show';
+    modal.innerHTML = `
+      <div class="modal-box">
+        <button class="modal-close" id="mClose">✕</button>
+        <h3 class="modal-title">🔍 Hasil Pengamatan</h3>
+        <p class="modal-sub">${d.nama} — <b>${d.rumus}</b></p>
+
+        <div class="obs-list">
+          ${obs.map(o => `<div class="obs-item">${o}</div>`).join('')}
+        </div>
+
+        <p class="txt" style="font-weight:800;color:#1e293b;margin-bottom:10px;">
+          Larutan ini termasuk…
+        </p>
+
+        <div class="ans-btns">
+          <button class="ans-btn" data-ans="kuat">⚡ Elektrolit Kuat</button>
+          <button class="ans-btn" data-ans="lemah">💧 Elektrolit Lemah</button>
+          <button class="ans-btn" data-ans="non">🚫 Non-Elektrolit</button>
+        </div>
+
+        <div class="feedback" id="mFeedback"></div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    const closeBtn = modal.querySelector('#mClose');
+    closeBtn.addEventListener('click', () => {
+      Sound.click();
+      modal.remove();
+      this.resetStationLamp(station);
+    });
+
+    let salah = 0;
+    let answered = false;
+
+    modal.querySelectorAll('.ans-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(answered) return;
+        Sound.init();
+        const pilih = btn.dataset.ans;
+        const fb = modal.querySelector('#mFeedback');
+
+        if(pilih === d.tipe){
+          /* ── BENAR ── */
+          answered = true;
+          Sound.correct();
+          btn.classList.add('correct');
+          modal.querySelectorAll('.ans-btn').forEach(b => b.disabled = true);
+
+          const poinDidapat = 10 - (salah * 5);
+          state.poinPraktikum = clampPoin(state.poinPraktikum + poinDidapat);
+          state.detailPraktikum.push({
+            larutan: d.nama,
+            rumus: d.rumus,
+            tipe: d.tipe,
+            jawabanBenar: true,
+            salahPercobaan: salah,
+            poinDidapat: poinDidapat
+          });
+          saveState();
+          updateHUD();
+
+          fb.className = 'feedback show ok';
+          fb.innerHTML = `✅ Tepat sekali! Ini larutan elektrolit ${
+            d.tipe === 'kuat' ? 'kuat' : d.tipe === 'lemah' ? 'lemah' : 'non-elektrolit'
+          }.<br>+${poinDidapat} poin untukmu! ⭐`;
+
+          station.tested = true;
+
+          setTimeout(() => {
+            modal.remove();
+            this.resetStationLamp(station);
+            this.checkLabCompletion();
+          }, 1500);
+
+        } else {
+          /* ── SALAH ── */
+          Sound.wrong();
+          salah++;
+          state.poinPraktikum = clampPoin(state.poinPraktikum - 5);
+          saveState();
+          updateHUD();
+
+          btn.classList.add('wrong');
+          btn.disabled = true;
+
+          fb.className = 'feedback show no';
+          fb.innerHTML = '❌ Belum tepat. Coba perhatikan lagi nyala lampu dan jumlah gelembungnya! (−5 poin)';
+        }
+      });
+    });
+  },
+
+  /* ---------- Reset lampu stasiun ---------- */
+  resetStationLamp(station){
+    station.bulbMat.emissive.setHex(0x000000);
+    station.bulbMat.emissiveIntensity = 0;
+    station.bulbMat.color.setHex(0xf1f5f9);
+    this.lampTarget = 0;
+    this.lampIntensity = 0;
+    if(this.testLight) this.testLight.intensity = 0;
+    this.activeBulb = null;
+  },
+
+  /* ---------- Cek apakah 10 gelas sudah selesai ---------- */
+  checkLabCompletion(){
+    const done = this.stations.filter(s => s.tested).length;
+    $('hudProg').textContent = `${done}/10`;
+    if(done >= 10){
+      setTimeout(() => {
+        Sound.fanfare();
+        toast('🎉 Semua larutan berhasil diuji!');
+        setTimeout(() => startQuiz(), 1300);
+      }, 500);
+    }
+  }
+};
+
+/* ── Tombol Uji ── */
+$('btnUji').addEventListener('click', () => {
+  Sound.init();
+  Sound.click();
+  if(Lab.nearStation) Lab.runTest(Lab.nearStation);
+});
+
+/* ── Update HUD ── */
+function updateHUD(){
+  const total = state.poinPraktikum + state.poinKritis;
+  $('hudPoin').textContent = total;
+  const done = Lab.stations ? Lab.stations.filter(s => s.tested).length : 0;
+  $('hudProg').textContent = `${done}/10`;
+}
+
+/* ── Toggle suara ── */
+$('btnSound').addEventListener('click', () => {
+  Sound.init();
+  Sound.enabled = !Sound.enabled;
+  $('btnSound').textContent = Sound.enabled ? '🔊' : '🔇';
+  if(Sound.enabled){
+    Sound.click();
+    Sound.startBg();
+  } else {
+    Sound.stopBg();
+  }
+});
+
+/* ── Unduh JSON dari HUD ── */
+$('btnJson').addEventListener('click', () => {
+  Sound.init(); Sound.click();
+  downloadJSON();
+});
+
+/* ══════════════════════════════════════════════════════════════════
+   ██  SECTION 6 — LAYAR 3 : SOAL BERPIKIR KRITIS
+   ══════════════════════════════════════════════════════════════════ */
+let qIndex = 0;
+let qSalah = 0;
+let qLocked = false;
+
+function startQuiz(){
+  qIndex = 0;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  qLocked = false;
+  qSalah = 0;
+
+  const soal = SOAL_KRITIS[qIndex];
+  $('quizCount').textContent = `${qIndex + 1} / ${SOAL_KRITIS.length}`;
+  $('qNum').textContent = `SOAL ${qIndex + 1}`;
+  $('qText').textContent = soal.q;
+  $('quizBar').style.width = `${(qIndex / SOAL_KRITIS.length) * 100}%`;
+
+  const fb = $('qFeedback');
+  fb.className = 'feedback';
+  fb.innerHTML = '';
+
+  $('btnNext').style.display = 'none';
+
+  const optsBox = $('qOpts');
+  optsBox.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+
+  soal.opsi.forEach((teks, i) => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.innerHTML = `<span class="ltr">${letters[i]}</span><span>${teks}</span>`;
+    b.addEventListener('click', () => jawabSoal(i, b));
+    optsBox.appendChild(b);
+  });
+}
+
+function jawabSoal(pilih, btn){
+  if(qLocked) return;
+  Sound.init();
+
+  const soal = SOAL_KRITIS[qIndex];
+  const fb = $('qFeedback');
+
+  if(pilih === soal.benar){
+    /* ── BENAR ── */
+    qLocked = true;
+    Sound.correct();
+    btn.classList.add('correct');
+    document.querySelectorAll('#qOpts .opt').forEach(b => b.disabled = true);
+
+    const poinDidapat = 10 - (qSalah * 5);
+    state.poinKritis = clampPoin(state.poinKritis + poinDidapat);
+    state.detailKritis.push({
+      soal: qIndex + 1,
+      pertanyaan: soal.q,
+      jawabanBenar: soal.opsi[soal.benar],
+      salahPercobaan: qSalah,
+      poinDidapat: poinDidapat
+    });
+    saveState();
+
+    fb.className = 'feedback show ok';
+    fb.innerHTML = `✅ Jawaban benar! +${poinDidapat} poin ⭐<br><br>📘 <b>Pembahasan:</b> ${soal.bahas}`;
+
+    $('quizBar').style.width = `${((qIndex + 1) / SOAL_KRITIS.length) * 100}%`;
+
+    const nextBtn = $('btnNext');
+    nextBtn.style.display = 'block';
+    nextBtn.textContent = qIndex === SOAL_KRITIS.length - 1 ? '🏅 LIHAT SERTIFIKAT' : 'LANJUT ➡️';
+
+  } else {
+    /* ── SALAH ── */
+    Sound.wrong();
+    qSalah++;
+    state.poinKritis = clampPoin(state.poinKritis - 5);
+    saveState();
+
+    btn.classList.add('wrong');
+    btn.disabled = true;
+
+    fb.className = 'feedback show no';
+    fb.innerHTML = '❌ Belum tepat. Baca lagi soalnya dengan cermat, lalu coba opsi lain! (−5 poin)';
+  }
+}
+
+$('btnNext').addEventListener('click', () => {
+  Sound.init(); Sound.click();
+  if(qIndex < SOAL_KRITIS.length - 1){
+    qIndex++;
+    renderQuestion();
+  } else {
+    finishGame();
+  }
+});
+
+/* ══════════════════════════════════════════════════════════════════
+   ██  SECTION 7 — LAYAR 4 : SERTIFIKAT
+   ══════════════════════════════════════════════════════════════════ */
+function finishGame(){
+  hitungNilai();
+  state.selesai = new Date().toISOString();
+  state.totalPoin = state.poinPraktikum + state.poinKritis;
+  saveState();
+
+  /* Isi sertifikat */
+  $('certName').textContent = state.nama || 'Detektif Elektrolit';
+  $('certNilai').textContent = state.nilai;
+  $('certGrade').textContent = state.grade;
+  $('certDate').textContent = 'Pontianak, ' + tanggalIndo();
+
+  showScreen('screen-cert');
+  Sound.fanfare();
+  Sound.stopBg();
+
+  setTimeout(() => toast('🏅 Sertifikatmu siap diunduh!'), 700);
+}
+
+/* ── Unduh PDF (dengan fix gradient text) ── */
+$('btnPdf').addEventListener('click', async () => {
+  Sound.init(); Sound.click();
+  const btn = $('btnPdf');
+  const original = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '⏳ Menyiapkan PDF…';
+
+  try{
+    if(document.fonts && document.fonts.ready){
+      await document.fonts.ready;
+    }
+    await new Promise(r => setTimeout(r, 120));
+
+    const el = $('certCard');
+
+    const canvas = await html2canvas(el, {
+      scale: 2.2,
+      backgroundColor: '#ffffff',
+      useCORS: true,
+      logging: false,
+      windowWidth: el.scrollWidth,
+      windowHeight: el.scrollHeight,
+
+      /* ══ FIX KRITIS: paksa warna SOLID pada gradient text ══ */
+      onclone: (clonedDoc) => {
+        /* 1. Judul SERTIFIKAT */
+        clonedDoc.querySelectorAll('.cert-title').forEach(n => {
+          n.style.background = 'none';
+          n.style.backgroundImage = 'none';
+          n.style.webkitBackgroundClip = 'initial';
+          n.style.backgroundClip = 'initial';
+          n.style.color = '#d946ef';
+          n.style.webkitTextFillColor = '#d946ef';
+        });
+
+        /* 2. NILAI (angka) */
+        clonedDoc.querySelectorAll('.cert-score strong').forEach(n => {
+          n.style.background = 'none';
+          n.style.backgroundImage = 'none';
+          n.style.webkitBackgroundClip = 'initial';
+          n.style.backgroundClip = 'initial';
+          n.style.color = '#0891b2';
+          n.style.webkitTextFillColor = '#0891b2';
+        });
+
+        /* 3. PREDIKAT (A / B / C) */
+        clonedDoc.querySelectorAll('.cert-grade strong').forEach(n => {
+          n.style.background = 'none';
+          n.style.backgroundImage = 'none';
+          n.style.webkitBackgroundClip = 'initial';
+          n.style.backgroundClip = 'initial';
+          n.style.color = '#db2777';
+          n.style.webkitTextFillColor = '#db2777';
+        });
+
+        /* 4. Fallback: semua .cert-score strong / .cert-grade strong */
+        clonedDoc.querySelectorAll('.cert-score strong, .cert-grade strong').forEach(n => {
+          if(!n.style.color || n.style.color === ''){
+            n.style.color = n.closest('.cert-score') ? '#0891b2' : '#db2777';
+            n.style.webkitTextFillColor = n.style.color;
+          }
+        });
+      }
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+    const pw = pdf.internal.pageSize.getWidth();
+    const ph = pdf.internal.pageSize.getHeight();
+
+    const margin = 10;
+    const maxW = pw - margin * 2;
+    const maxH = ph - margin * 2;
+
+    let w = maxW;
+    let h = canvas.height * w / canvas.width;
+    if(h > maxH){
+      h = maxH;
+      w = canvas.width * h / canvas.height;
+    }
+
+    const x = (pw - w) / 2;
+    const y = (ph - h) / 2;
+
+    pdf.addImage(imgData, 'PNG', x, y, w, h, undefined, 'FAST');
+
+    const namaFile = (state.nama || 'Siswa').replace(/\s+/g, '_');
+    pdf.save(`Sertifikat_LabDetektifElektrolit_${namaFile}.pdf`);
+
+    toast('✅ Sertifikat PDF berhasil diunduh!');
+
+  } catch(err){
+    console.error('Gagal membuat PDF:', err);
+    toast('⚠️ PDF gagal, membuka mode cetak…');
+    setTimeout(() => window.print(), 500);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = original;
+  }
+});
+
+/* ── Main lagi dari awal ── */
+$('btnRestart').addEventListener('click', () => {
+  Sound.init(); Sound.click();
+
+  /* Reset state */
+  state.poinPraktikum = 0;
+  state.poinKritis = 0;
+  state.totalPoin = 0;
+  state.nilai = 0;
+  state.grade = 'C';
+  state.detailPraktikum = [];
+  state.detailKritis = [];
+  state.mulai = null;
+  state.selesai = null;
+  state.updated = null;
+  saveState();
+
+  /* Reset stasiun lab */
+  if(Lab.stations){
+    Lab.stations.forEach(st => {
+      st.tested = false;
+      st.bubbling = false;
+      Lab.removeBubbles(st);
+      Lab.resetStationLamp(st);
+    });
+  }
+  if(Lab.player){
+    Lab.player.position.set(0, 0, 0);
+    Lab.player.rotation.y = 0;
+  }
+  Lab.moveTarget = null;
+  Lab.facing = 0;
+  qIndex = 0;
+  qSalah = 0;
+
+  $('hudPoin').textContent = '0';
+  $('hudProg').textContent = '0/10';
+
+  showScreen('screen-home');
+  toast('🔄 Siap bermain lagi!');
+});
+
+/* ══════════════════════════════════════════════════════════════════
+   ██  SECTION 8 — INISIALISASI AWAL
+   ══════════════════════════════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  /* Aktifkan AudioContext pada gesture pertama */
+  const unlock = () => {
+    Sound.init();
+    document.removeEventListener('touchstart', unlock);
+    document.removeEventListener('click', unlock);
+  };
+  document.addEventListener('touchstart', unlock, { once: true });
+  document.addEventListener('click', unlock, { once: true });
+});
+
+/* Cegah zoom ganda di iOS */
+document.addEventListener('gesturestart', e => e.preventDefault());
+</script>
+</body>
+</html>
